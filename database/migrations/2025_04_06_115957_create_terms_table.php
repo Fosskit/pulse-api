@@ -12,21 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         // TaxonomyValue Values Table
-        Schema::create('taxonomy_values', function (Blueprint $table) {
+        Schema::create('terms', function (Blueprint $table) {
             $table->id();
             $table->string('code', 50)->index();
-            $table->unsignedBigInteger('taxonomy_id')->index();
+            $table->unsignedBigInteger('terminology_id')->index();
             $table->string('name');
-            $table->string('name_kh')->nullable();
             $table->unsignedBigInteger('parent_id')->nullable()->index();
             $table->integer('sort_order')->default(0);
             $table->boolean('is_active')->default(true);
             $table->text('description')->nullable();
             $table->timestamps();
 
-            $table->unique(['taxonomy_id', 'code']);
-            $table->foreign('taxonomy_id')->references('id')->on('taxonomy_terms')->cascadeOnDelete();
-            $table->foreign('parent_id')->references('id')->on('taxonomy_values')->nullOnDelete();
+            $table->unique(['terminology_id', 'code']);
+            $table->foreign('terminology_id')->references('id')->on('terminologies')->cascadeOnDelete();
+            $table->foreign('parent_id')->references('id')->on('terms')->nullOnDelete();
         });
     }
 
@@ -35,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('taxonomy_values');
+        Schema::dropIfExists('terms');
     }
 };

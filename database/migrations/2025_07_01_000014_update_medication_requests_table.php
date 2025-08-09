@@ -18,13 +18,13 @@ return new class extends Migration
             $table->unsignedBigInteger('intent_id')->index();
             $table->unsignedBigInteger('medication_id')->index();
             $table->unsignedBigInteger('requester_id')->index();
+            $table->unsignedBigInteger('instruction_id')->index();
             $table->unsignedBigInteger('quantity')->index();
-            $table->unsignedBigInteger('medication_instruction_id')->index();
-            $table->unsignedBigInteger('measurement_unit_id')->index();
+            $table->unsignedBigInteger('unit_id')->index();
             $table->commonFields();
 
             $table->foreign('visit_id')->references('id')->on('visits');
-            $table->foreign('medication_instruction_id')->references('id')->on('medication_instructions');
+            $table->foreign('instruction_id')->references('id')->on('medication_instructions');
         });
     }
 

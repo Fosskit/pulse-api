@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('code')->index()->unique();
             $table->string('name');
-            $table->string('name_kh');
             $table->string('level_id');
             $table->string('type_id');
             $table->string('map_code');

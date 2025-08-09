@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\TaxonomyTerm;
+use App\Models\Terminology;
 use App\Models\TaxonomyValue;
 use Illuminate\Database\Seeder;
 
@@ -142,13 +142,13 @@ class TaxonomySeeder extends Seeder
 
             // If it has a parent, find the parent ID
             if ($parentCode) {
-                $parent = TaxonomyTerm::where('code', $parentCode)->first();
+                $parent = Terminology::where('code', $parentCode)->first();
                 if ($parent) {
                     $taxonomy['parent_id'] = $parent->id;
                 }
             }
 
-            TaxonomyTerm::create($taxonomy);
+            Terminology::create($taxonomy);
         }
     }
 
@@ -265,7 +265,7 @@ class TaxonomySeeder extends Seeder
      */
     private function seedTaxonomyValues(string $taxonomyCode, array $values): void
     {
-        $taxonomy = TaxonomyTerm::where('code', $taxonomyCode)->first();
+        $taxonomy = Terminology::where('code', $taxonomyCode)->first();
 
         if (!$taxonomy) {
             return;

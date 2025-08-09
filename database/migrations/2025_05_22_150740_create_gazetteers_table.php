@@ -17,7 +17,6 @@ return new class extends Migration
             $table->enum('type', ['Province', 'District', 'Commune', 'Village'])->index();
             $table->foreignId('parent_id')->index();
             $table->string('name');
-            $table->string('name_kh')->nullable();
             $table->commonFields();
         });
     }

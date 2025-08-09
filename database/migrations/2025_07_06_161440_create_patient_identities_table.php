@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('patient_identities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')->constrained('patients')->cascadeOnDelete();
             $table->string('code');
-            $table->foreignId('card_type_id')->constrained('taxonomy_values')->cascadeOnDelete();
-            $table->boolean('is_active')->default(true);
-            $table->date('issued_date');
-            $table->date('expired_date');
-            $table->timestamps();
+            $table->unsignedBigInteger('patient_id')->index();
+            $table->unsignedBigInteger('card_id')->index();
+            $table->date('start_date')->index();
+            $table->date('end_date')->nullable()->index();
+            $table->json('detail');
+            $table->commonFields();
+            $table->foreign('patient_id')->references('id')->on('patients');
         });
     }
 

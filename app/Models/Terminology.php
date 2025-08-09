@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class TaxonomyTerm extends Model
+class Terminology extends Model
 {
     use HasFactory;
 
@@ -30,7 +30,7 @@ class TaxonomyTerm extends Model
      */
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(TaxonomyTerm::class, 'parent_id');
+        return $this->belongsTo(Terminology::class, 'parent_id');
     }
 
     /**
@@ -38,7 +38,7 @@ class TaxonomyTerm extends Model
      */
     public function children(): HasMany
     {
-        return $this->hasMany(TaxonomyTerm::class, 'parent_id');
+        return $this->hasMany(Terminology::class, 'parent_id');
     }
 
     /**

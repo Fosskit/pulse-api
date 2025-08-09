@@ -11,9 +11,9 @@ return new class extends Migration
         Schema::create('visit_subjects', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('visit_id')->nullable()->unique();
-            $table->unsignedBigInteger('patient_basic_id')->nullable()->index();
+            $table->unsignedBigInteger('patient_demographic_id')->nullable()->index();
             $table->unsignedBigInteger('patient_address_id')->nullable()->index();
-            $table->string('beneficiary_code')->nullable()->index();
+            $table->string('identity_code')->nullable()->index();
             $table->string('card_code')->nullable()->index();
             $table->unsignedTinyInteger('card_type_id')->nullable()->index();
             $table->date('start_date')->nullable()->index();

@@ -16,7 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('payment_type_id')->index();
             $table->datetime('date')->nullable();
             $table->decimal('total', 8, 2)->default(0.00);
-            $table->bigInteger('discount_type_id')->nullable()->index();
+            $table->decimal('percentage_discount', 8, 2)->default(0.00);
+            $table->decimal('amount_discount', 8, 2)->default(0.00);
             $table->decimal('discount', 8, 2)->default(0.00);
             $table->decimal('received', 8, 2)->default(0.00);
             $table->string('remark', 70)->nullable();

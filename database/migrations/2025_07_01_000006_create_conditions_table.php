@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('observations', function (Blueprint $table) {
+        Schema::create('conditions', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('parent_id')->nullable();
             $table->unsignedBigInteger('patient_id')->nullable();
@@ -35,6 +35,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('observations');
+        Schema::dropIfExists('conditions');
     }
 };

@@ -31,7 +31,7 @@ class TaxonomyValue extends Model
      */
     public function term(): BelongsTo
     {
-        return $this->belongsTo(TaxonomyTerm::class, 'taxonomy_id');
+        return $this->belongsTo(Terminology::class, 'taxonomy_id');
     }
 
     /**
@@ -55,7 +55,7 @@ class TaxonomyValue extends Model
      */
     public static function findByCode(string $taxonomyCode, string $code)
     {
-        $taxonomy = TaxonomyTerm::where('code', $taxonomyCode)->first();
+        $taxonomy = Terminology::where('code', $taxonomyCode)->first();
 
         if (!$taxonomy) {
             return null;
@@ -71,7 +71,7 @@ class TaxonomyValue extends Model
      */
     public static function getOptions(string $taxonomyCode)
     {
-        $taxonomy = TaxonomyTerm::where('code', $taxonomyCode)->first();
+        $taxonomy = Terminology::where('code', $taxonomyCode)->first();
 
         if (!$taxonomy) {
             return collect();
@@ -88,7 +88,7 @@ class TaxonomyValue extends Model
      */
     public static function getHierarchicalOptions(string $taxonomyCode)
     {
-        $taxonomy = TaxonomyTerm::where('code', $taxonomyCode)->first();
+        $taxonomy = Terminology::where('code', $taxonomyCode)->first();
 
         if (!$taxonomy) {
             return collect();
@@ -115,7 +115,7 @@ class TaxonomyValue extends Model
     public static function getSelectOptions(string $taxonomyCode, bool $useKhmer = false)
     {
         $field = $useKhmer ? 'name_kh' : 'name';
-        $taxonomy = TaxonomyTerm::where('code', $taxonomyCode)->first();
+        $taxonomy = Terminology::where('code', $taxonomyCode)->first();
 
         if (!$taxonomy) {
             return [];

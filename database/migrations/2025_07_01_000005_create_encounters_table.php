@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('code', 77)->nullable()->index();
             $table->unsignedBigInteger('visit_id')->index();
             $table->unsignedBigInteger('encounter_type_id')->nullable()->index()->comment('Admission, Discharge, Transfer');
-            $table->unsignedBigInteger('case_type_id')->nullable()->index()->comment('Old Case, New Case');
+            $table->boolean('is_new')->default(0)->index()->comment('Old Case, New Case');
             $table->unsignedBigInteger('encounter_form_id')->index()->comment('Triage, OPD, MPH, ...');
             $table->datetime('started_at')->useCurrent()->index();
             $table->datetime('ended_at')->nullable()->index();

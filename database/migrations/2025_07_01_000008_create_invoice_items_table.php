@@ -10,7 +10,6 @@ return new class extends Migration
     {
         Schema::create('invoice_items', function (Blueprint $table) {
             $table->id();
-            $table->string('invoice_code')->nullable()->index();
             $table->unsignedBigInteger('invoice_id')->index();
             $table->unsignedBigInteger('invoiceable_id')->index();
             $table->string('invoiceable_type')->index()->comment('Service / Medicine');

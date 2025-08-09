@@ -8,9 +8,10 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('patients', function (Blueprint $table) {
+        Schema::create('patient_demographics', function (Blueprint $table) {
             $table->id();
-            $table->json('name')->notNullable();
+            $table->foreignId('patient_id')->constrained('patients');
+            $table->json('name');
             $table->date('birthdate')->index();
             $table->json('telecom')->nullable();
             $table->json('address')->nullable();
