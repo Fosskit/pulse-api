@@ -7,7 +7,7 @@ return [
      * Your API path. By default, all routes starting with this path will be added to the docs.
      * If you need to change this behavior, you can add your custom routes resolver using `Scramble::routes()`.
      */
-    'api_path' => 'api',
+    'api_path' => 'api/v1',
 
     /*
      * Your API domain. By default, app domain is used. This is also a part of the default API routes
@@ -18,18 +18,39 @@ return [
     /*
      * The path where your OpenAPI specification will be exported.
      */
-    'export_path' => 'api.json',
+    'export_path' => 'api-v1.json',
 
     'info' => [
         /*
          * API version.
          */
-        'version' => env('API_VERSION', '0.0.1'),
+        'version' => env('API_VERSION', '1.0.0'),
+
+        /*
+         * API title.
+         */
+        'title' => 'EMR FHIR API',
 
         /*
          * Description rendered on the home page of the API documentation (`/docs/api`).
          */
-        'description' => '',
+        'description' => 'A comprehensive Electronic Medical Record (EMR) API system built on simplified HL7 FHIR standards. This API provides endpoints for managing patient information, clinical workflows, medications, service requests, billing, and facility management.',
+
+        /*
+         * Contact information for the API.
+         */
+        'contact' => [
+            'name' => 'EMR FHIR API Support',
+            'email' => env('API_CONTACT_EMAIL', 'support@emr-fhir.local'),
+        ],
+
+        /*
+         * License information for the API.
+         */
+        'license' => [
+            'name' => 'MIT',
+            'url' => 'https://opensource.org/licenses/MIT',
+        ],
     ],
 
     /*
@@ -39,7 +60,7 @@ return [
         /*
          * Define the title of the documentation's website. App name is used when this config is `null`.
          */
-        'title' => null,
+        'title' => 'EMR FHIR API Documentation',
 
         /*
          * Define the theme of the documentation. Available options are `light` and `dark`.
@@ -79,17 +100,11 @@ return [
      * The list of servers of the API. By default, when `null`, server URL will be created from
      * `scramble.api_path` and `scramble.api_domain` config variables. When providing an array, you
      * will need to specify the local server URL manually (if needed).
-     *
-     * Example of non-default config (final URLs are generated using Laravel `url` helper):
-     *
-     * ```php
-     * 'servers' => [
-     *     'Live' => 'api',
-     *     'Prod' => 'https://scramble.dedoc.co/api',
-     * ],
-     * ```
      */
-    'servers' => null,
+    'servers' => [
+        'Development' => env('APP_URL', 'http://localhost:8000') . '/api/v1',
+        'Production' => env('API_PRODUCTION_URL', 'https://api.emr-fhir.com') . '/api/v1',
+    ],
 
     /**
      * Determines how Scramble stores the descriptions of enum cases.
@@ -107,5 +122,58 @@ return [
         RestrictedDocsAccess::class,
     ],
 
-    'extensions' => [],
+    'extensions' => [
+        /*
+         * Security schemes for API authentication
+         */
+        'securitySchemes' => [
+            'sanctum' => [
+                'type' => 'http',
+                'scheme' => 'bearer',
+                'bearerFormat' => 'JWT',
+                'description' => 'Laravel Sanctum authentication token',
+            ],
+        ],
+        
+        /*
+         * Global security requirements
+         */
+        'security' => [
+            ['sanctum' => []],
+        ],
+    ],
+
+    /*
+     * Custom OpenAPI tags for organizing endpoints
+     */
+    'tags' => [
+        [
+            'name' => 'Authentication',
+            'description' => 'User authentication and authorization endpoints',
+        ],
+        [
+            'name' => 'Patients',
+            'description' => 'Patient management and demographics',
+        ],
+        [
+            'name' => 'Visits',
+            'description' => 'Patient visits and admissions',
+        ],
+        [
+            'name' => 'Encounters',
+            'description' => 'Clinical encounters and activities',
+        ],
+        [
+            'name' => 'Clinical Forms',
+            'description' => 'Clinical form templates and submissions',
+        ],
+        [
+            'name' => 'Observations',
+            'description' => 'Clinical observations and vital signs',
+        ],
+        [
+            'name' => 'Reference Data',
+            'description' => 'Taxonomy, facilities, and gazetteer data',
+        ],
+    ],
 ];
