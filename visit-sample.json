@@ -1,0 +1,562 @@
+{
+  "visits": [
+    {
+      "health_facility_code": "121020",
+      "patient_code": "P25003877",
+      "code": "V420650",
+      "admission_type": "Self Refer",
+      "discharge_type": "Authorized",
+      "visit_outcome": "Improved",
+      "visit_type": "OPD",
+      "admitted_at": "2025-03-17T09:30:00.000+07:00",
+      "discharged_at": "2025-03-17T10:45:00.000+07:00",
+      "followup_at": "2025-03-24T09:00:00.000+07:00",
+      "created_at": "2025-03-17T09:30:00.000+07:00",
+      "updated_at": "2025-03-17T10:45:00.000+07:00",
+      "patient": {
+        "code": "PT20250317001",
+        "surname": "Smith",
+        "name": "John",
+        "sex": "M",
+        "birthdate": "1980-05-15",
+        "phone": "012 345 678",
+        "nationality": "Cambodian",
+        "disabilities": [
+          "Hearing impairment"
+        ],
+        "occupation": "Teacher",
+        "marital_status": "Married",
+        "photos": [
+          "https://hospital.example/photos/PT20250317001_1.jpg"
+        ],
+        "address": {
+          "province": {
+            "code": "12",
+            "name": "Phnom Penh"
+          },
+          "district": {
+            "code": "1201",
+            "name": "Chamkar Mon"
+          },
+          "commune": {
+            "code": "120101",
+            "name": "Tonle Bassac"
+          },
+          "village": {
+            "code": "12010101",
+            "name": "Phsar Deum Thkov"
+          },
+          "house_number": "45",
+          "street_number": "302",
+          "location": "Near Central Market 1"
+        },
+        "identifications": [
+          {
+            "patient_code": "P25003877",
+            "card_code": "ID123456789",
+            "card_type": "National ID"
+          }
+        ],
+        "death_at": null,
+        "spid": "250317001",
+        "created_at": "2025-03-17T08:30:00.000+07:00",
+        "updated_at": "2025-03-17T08:30:00.000+07:00"
+      },
+      "triages": [
+        {
+          "parent_code": "P2324",
+          "visit_code": " V420650",
+          "code": "TR250317",
+          "chief_complaint": "Periodic fever with chills for 3 days",
+          "height": 170,
+          "weight": 65,
+          "recorded_at": "2025-03-17T09:32:00.000+07:00",
+          "recorded_by": "Khun Srey Mom",
+          "title": "Doctor"
+        }
+      ],
+      "vital_signs": [
+        {
+          "encounter_code": "TR250317",
+          "recorded_at": "2025-03-17T09:40:00.000+07:00",
+          "recorded_by": "Khun Srey Mom",
+          "title": "Doctor",
+          "observations": [
+            {
+              "name": "Blood Pressure Systolic",
+              "value": 135
+            },
+            {
+              "name": "Blood Pressure Diastolic",
+              "value": 85
+            },
+            {
+              "name": "Pulse",
+              "value": 92
+            },
+            {
+              "name": "Respiratory Rate",
+              "value": 18
+            },
+            {
+              "name": "Temperature",
+              "value": 38.7
+            },
+            {
+              "name": "SpO2",
+              "value": 97
+            },
+            {
+              "name": "Glucose",
+              "value": 110
+            }
+          ]
+        }
+      ],
+      "medical_histories": [
+        {
+          "patient_code": "P25003877",
+          "visit_code": "V420650",
+          "encounter_code": "E417002",
+          "name": " Immunization History",
+          "value": [
+            "BCG",
+            "OPV",
+            "DTP",
+            "Measles",
+            "COVID-19"
+          ]
+        },
+        {
+          "patient_code": "P25003877",
+          "visit_code": "V420650",
+          "encounter_code": "E417002",
+          "name": "Allergies",
+          "value": [
+            "Prahok",
+            "Shrimp paste",
+            "Penicillin"
+          ]
+        },
+        {
+          "patient_code": "P25003877",
+          "visit_code": "V420650",
+          "encounter_code": "E417002",
+          "name": "Past Surgical History",
+          "value": [
+            "Appendectomy Surgery"
+          ]
+        },
+        {
+          "patient_code": "P25003877",
+          "visit_code": "V420650",
+          "encounter_code": "E417002",
+          "name": "Past Medical History",
+          "value": [
+            "Dengue fever (2020)",
+            "Typhoid (2018)",
+            "Cesarean section at Calmette Hospital (2019)"
+          ]
+        },
+        {
+          "patient_code": "P25003877",
+          "visit_code": "V420650",
+          "encounter_code": "E417002",
+          "name": "Family History",
+          "value": [
+            "Mother with diabetes",
+            "Father with hypertension and stroke at age 60"
+          ]
+        },
+        {
+          "patient_code": "P25003877",
+          "visit_code": "V420650",
+          "encounter_code": "E417002",
+          "name": "Current Illness History",
+          "value": [
+            "Patient reports high fever with chills occurring every 48 hours, accompanied by headache and joint pain. Symptoms started 3 days ago after returning from a trip to Mondulkiri province. No prior history of malaria. No medication taken yet."
+          ]
+        },
+        {
+          "patient_code": "P25003877",
+          "visit_code": "V420650",
+          "encounter_code": "E417002",
+          "name": "Current Medication",
+          "value": [
+            "Metformin 500mg",
+            "Amlodipine 5mg"
+          ]
+        }
+      ],
+      "physical_examinations": [
+        {
+          "patient_code": "P25003877",
+          "visit_code": "V420650",
+          "encounter_code": "EN20250317001",
+          "name": "General Appearance",
+          "value": "Ill-appearing with intermittent shivering",
+          "value_type": "text",
+          "value_unit": null
+        },
+        {
+          "patient_code": "P25003877",
+          "visit_code": "V420650",
+          "encounter_code": "E417002",
+          "name": "Skin",
+          "value": "Warm, jaundiced, no rash",
+          "value_type": "text",
+          "value_unit": null
+        },
+        {
+          "patient_code": "P25003877",
+          "visit_code": "V420650",
+          "encounter_code": "E417002",
+          "name": "Digestive System",
+          "value": [
+            {
+              "inspection": "Flat, no visible masses"
+            },
+            {
+              "palpation": "Soft, mild RUQ tenderness, spleen palpable 1cm below costal margin"
+            },
+            {
+              "percussion": "No shifting dullness"
+            },
+            {
+              "auscultation": "Normal bowel sounds"
+            }
+          ],
+          "value_type": "complex",
+          "value_unit": null
+        }
+      ],
+      "outpatients": [
+        {
+          "visit_code": "V420650",
+          "code": "E417001",
+          "name": "General Inpatient",
+          "service_type": "General Medicine",
+          "started_at": "2025-03-17T09:35:00.000+07:00",
+          "ended_at": "2025-03-17T10:15:00.000+07:00",
+          "encountered_by": "Dr. Chhun Sovannarith",
+          "title": "Doctor",
+          "created_at": "2025-03-17T09:35:00.000+07:00",
+          "updated_at": "2025-03-17T10:15:00.000+07:00"
+        }
+      ],
+      "inpatients": [
+        {
+          "visit_code": "V420650",
+          "code": "E417002",
+          "name": "General Inpatient",
+          "service_type": "Internal Medicine",
+          "started_at": "2025-03-20T14:00:00.000+07:00",
+          "ended_at": "2025-03-23T10:00:00.000+07:00",
+          "encountered_by": "Dr. Chhun Sovannarith",
+          "title": "Doctor",
+          "created_at": "2025-03-17T09:35:00.000+07:00",
+          "updated_at": "2025-03-17T10:15:00.000+07:00"
+        }
+      ],
+      "emergencies": [
+        {
+          "visit_code": "V420650",
+          "code": "E417003",
+          "name": "Emergency",
+          "service_type_name": "Emergency Medicine",
+          "started_at": "2025-03-17T15:30:00.000+07:00",
+          "ended_at": "2025-03-17T17:45:00.000+07:00",
+          "encountered_by": "Dr. Hor Mony",
+          "title": "Doctor",
+          "created_at": "2025-03-17T09:35:00.000+07:00",
+          "updated_at": "2025-03-17T10:15:00.000+07:00"
+        }
+      ],
+      "surgeries": [
+        {
+          "visit_code": "V420650",
+          "parent_code": "E417001",
+          "code": "E417004",
+          "theater_name": "Operating Theater 2",
+          "service_type": "Laparoscopic Cholecystectomy",
+          "started_at": "2025-04-01T08:30:00.000+07:00",
+          "ended_at": "2025-04-01T10:15:00.000+07:00",
+          "reason": "Symptomatic gallstones with recurrent biliary colic",
+          "anesthesia_type": "General Endotracheal",
+          "procedure_notes": "Patient positioned supine. Pneumoperitoneum established with Veress needle. Four ports were placed. Gallbladder dissected from liver bed with hook cautery. Cystic duct and artery identified, clipped and divided. Gallbladder removed through umbilical port. Hemostasis confirmed. No bile leak. Ports removed under direct visualization. Wounds closed with 3-0 Vicryl and 4-0 Monocryl. Patient tolerated procedure well.",
+          "complications": [
+            "Mild bleeding from liver bed, controlled with electrocautery"
+          ],
+          "specimens": [
+            "Gallbladder with multiple stones",
+            "Cystic fluid sample"
+          ],
+          "blood_loss": "5cl",
+          "surgeon_name": "Dr. Sok Vichet",
+          "anesthetist_name": "Dr. Meas Sokunthea",
+          "assistant_names": [
+            "Dr. Chhan Rathana",
+            "Nurse Van Bopha"
+          ],
+          "created_at": "2025-04-01T08:30:00.000+07:00",
+          "updated_at": "2025-04-01T10:20:00.000+07:00"
+        }
+      ],
+      "progress_notes": [
+        {
+          "visit_code": "V420650",
+          "parent_code": "E417001",
+          "code": "E317001",
+          "started_at": "2025-03-17T16:00:00.000+07:00",
+          "ended_at": "2025-03-17T16:15:00.000+07:00",
+          "encountered_by": "Dr. Chhun Sovannarith",
+          "title": "Doctor",
+          "created_at": "2025-03-17T09:35:00.000+07:00",
+          "updated_at": "2025-03-17T10:15:00.000+07:00"
+        }
+      ],
+      "soaps": [
+        {
+          "encounter_code": " E417002",
+          "subjective": "Patient reports fever has decreased after first dose of medication. Still experiencing mild headache and fatigue. No chills since this morning. Able to tolerate oral intake well.",
+          "objective": "Temperature 37.8°C (down from 38.7°C). Heart rate 85/min. Blood pressure 125/80 mmHg. Skin less jaundiced. Abdomen remains soft with mild tenderness in RUQ.",
+          "assessment": "Uncomplicated malaria showing initial response to treatment. Fever trending down. No signs of complications.",
+          "plan": "Continue artemether-lumefantrine as prescribed. Encourage oral hydration. Follow-up in clinic in 3 days. Return sooner if symptoms worsen or unable to tolerate medication.",
+          "evaluation": null
+        }
+      ],
+      "laboratories": [
+        {
+          "patient_code": "P25003877",
+          "visit_code": "V420650",
+          "encounter_code": "E417002",
+          "request_code": "EL23222",
+          "requested_at": "2025-03-17T10:30:00.000+07:00",
+          "requested_by": "Dr. Chhun Sovannarith",
+          "title": "Doctor",
+          "collected_at": "2025-03-17T10:30:00.000+07:00",
+          "collected_by": "Dr. Chhun Sovannarith",
+          "results": [
+            {
+              "name": "Malaria Blood Smear",
+              "category": "Parasitology",
+              "value": "Positive for P. falciparum",
+              "value_type": "string",
+              "value_unit": null,
+              "reference_range": "Negative",
+              "interpretation": "Positive",
+              "verified_at": "2025-03-17T10:50:00.000+07:00",
+              "verified_by": "Dr. Meas Chenda",
+              "recorded_at": "2025-03-17T10:52:00.000+07:00",
+              "recorded_by": "Meas Chandaravuth"
+            },
+            {
+              "name": "Parasitemia",
+              "category": "Parasitology",
+              "value": 2.5,
+              "value_type": "float",
+              "value_unit": "%",
+              "reference_range": "0",
+              "interpretation": "High",
+              "verified_at": "2025-03-17T10:50:00.000+07:00",
+              "verified_by": "Dr. Meas Chenda",
+              "recorded_at": "2025-03-17T10:52:00.000+07:00",
+              "recorded_by": "Meas Chandaravuth"
+            },
+            {
+              "name": "Hemoglobin",
+              "category": "Hematology",
+              "value": 11.2,
+              "value_type": "float",
+              "value_unit": "g/dL",
+              "reference_range": "13.5-17.5",
+              "interpretation": "Low",
+              "verified_at": "2025-03-17T10:50:00.000+07:00",
+              "verified_by": "Dr. Meas Chenda",
+              "recorded_at": "2025-03-17T10:52:00.000+07:00",
+              "recorded_by": "Meas Chandaravuth"
+            }
+          ]
+        }
+      ],
+      "imageries": [
+        {
+          "patient_code": "P25003877",
+          "visit_code": "V420650",
+          "encounter_code": "E417002",
+          "request_code": "EL23222",
+          "requested_at": "2025-03-17T11:30:00.000+07:00",
+          "requested_by": "Dr. Chhun Sovannarith",
+          "title": "title",
+          "collected_at": "2025-03-17T10:30:00.000+07:00",
+          "collected_by": "Dr. Chhun Sovannarith",
+          "results": [
+            {
+              "name": "Brain Scan",
+              "category": "CT Scan",
+              "images": [
+                "img.com/result2.jpg"
+              ],
+              "result": "string",
+              "conclusion": null,
+              "verified_at": "2025-03-17T10:50:00.000+07:00",
+              "verified_by": "Dr. Meas Chenda",
+              "recorded_at": "2025-03-17T10:52:00.000+07:00",
+              "recorded_by": "Meas Chandaravuth"
+            }
+          ]
+        },
+        {
+          "patient_code": "P25003877",
+          "visit_code": "V420650",
+          "encounter_code": "E317001",
+          "request_code": "EL23222",
+          "requested_at": "2025-03-17T11:35:00.000+07:00",
+          "requested_by": "Dr. Chhun Sovannarith",
+          "tilte": "Doctor",
+          "results": [
+            {
+              "name": "Adomen Ultrasound",
+              "category": "Ultrasound",
+              "images": [
+                "img.com/result1.jpg"
+              ],
+              "result": "string",
+              "conclusion": null,
+              "verified_at": "2025-03-17T10:50:00.000+07:00",
+              "verified_by": "Dr. Meas Chenda",
+              "recorded_at": "2025-03-17T10:52:00.000+07:00",
+              "recorded_by": "Meas Chandaravuth"
+            }
+          ]
+        }
+      ],
+      "diagnosis": [
+        {
+          "patient_code": "P25003877",
+          "visit_code": "V420650",
+          "encounter_code": "E317001",
+          "diagnosis_type_name": "Primary",
+          "diagnosis_code": "B50",
+          "diagnosis_name": "Plasmodium falciparum malaria",
+          "diagnosis_description": "Plasmodium falciparum malaria with cerebral complications",
+          "diagnosed_at": "2025-03-17T10:05:00.000+07:00",
+          "diagnosed_by": "Dr. Chhun Sovannarith",
+          "title": "Doctor"
+        }
+      ],
+      "prescriptions": [
+        {
+          "patient_code": "P25003877",
+          "visit_code": "V420650",
+          "encounter_code": "E317001",
+          "code": "RX20250317001",
+          "prescribed_at": "2025-03-17T10:10:00.000+07:00",
+          "prescribed_by": "Dr. Chhun Sovannarith",
+          "title": "Doctor",
+          "medications": [
+            {
+              "code": "MED001",
+              "medicine_name": "Artemether-Lumefantrine",
+              "strength": "20/120mg",
+              "form": "Tablet",
+              "method": "Oral",
+              "unit": "Tablet",
+              "morning": 4,
+              "afternoon": 0,
+              "evening": 4,
+              "night": 0,
+              "days": 3,
+              "interval": null,
+              "note": "Take with food. Complete full course even if feeling better."
+            },
+            {
+              "code": "MED002",
+              "medicine_name": "Paracetamol",
+              "strength": "500mg",
+              "form": "Tablet",
+              "method": "Oral",
+              "unit": "Tablet",
+              "morning": null,
+              "afternoon": null,
+              "evening": null,
+              "night": null,
+              "days": 3,
+              "interval": "8 hours",
+              "note": "Take as needed for fever or pain."
+            }
+          ]
+        }
+      ],
+      "referrals": {
+        "referred_from": null,
+        "referred_to": {
+          "code": "REF20250317001",
+          "letter_number": "HCPP/REF/2025/317",
+          "transportation": "Ambulance",
+          "reason": "Severe malaria with signs of organ dysfunction requiring ICU care",
+          "has_called": true,
+          "caretaker_name": "Sok Channary",
+          "caretaker_phone": "012345678",
+          "referred_by": "Dr. Chhun Sovannarith",
+          "referred_by_phone": "0987654321",
+          "referred_at": "2025-03-17T11:30:00.000+07:00",
+          "received_by": "0712345678",
+          "received_at": "2025-03-17T12:15:00.000+07:00",
+          "medications": "Artemether-Lumefantrine 20/120mg (1 dose given at 10:15), IV Artesunate 120mg initiated at 11:00"
+        }
+      },
+      "invoices": [
+        {
+          "patient_code": "P25003877",
+          "visit_code": "V420650",
+          "encounter_code": "E317001",
+          "code": "INV20250317001",
+          "payment_type": "HEF",
+          "invoice_date": "2025-03-17T11:00:00.000+07:00",
+          "total": 120000,
+          "created_at": "2025-03-17T11:00:00.000+07:00",
+          "updated_at": "2025-03-17T11:00:00.000+07:00",
+          "cashier": "Sok Kunthea",
+          "services": [
+            {
+              "invoice_code": "INV20250317001",
+              "service_code": "SRV001",
+              "service_name": "Blood Smear for Malaria",
+              "service_category": "Lab Test",
+              "price": 15000,
+              "payment": 0,
+              "paid": false,
+              "discount_type": null,
+              "discount": 0
+            }
+          ],
+          "medications": [
+            {
+              "invoice_code": "INV20250317001",
+              "medicine_code": "MED001",
+              "medicine_name": "Artemether-Lumefantrine 20/120mg",
+              "quantity": 24,
+              "price": 1500,
+              "payment": 0,
+              "paid": false,
+              "discount_type": null,
+              "discount": 0
+            },
+            {
+              "invoice_code": "INV20250317001",
+              "medicine_code": "MED002",
+              "medicine_name": "Paracetamol 500mg",
+              "quantity": 9,
+              "price": 1000,
+              "payment": 0,
+              "paid": false,
+              "discount_type": null,
+              "discount": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
