@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('observations', function (Blueprint $table) {
             $table->id();
+            $table->ulid()->index();
             $table->bigInteger('parent_id')->nullable();
             $table->unsignedBigInteger('patient_id')->nullable();
             $table->unsignedBigInteger('encounter_id')->nullable()->index();

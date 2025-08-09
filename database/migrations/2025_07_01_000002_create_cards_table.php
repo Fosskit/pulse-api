@@ -8,16 +8,18 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('patients', function (Blueprint $table) {
+        Schema::create('cards', function (Blueprint $table) {
             $table->id();
             $table->ulid()->index();
             $table->string('code')->index();
-            $table->foreignId('facility_id')->index()->constrained('facilities');
+            $table->foreignId('card_type_id')->index()->constrained('terms');
+            $table->date('issue_date')->index();
+            $table->date('expiry_date')->index();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('patients');
+        Schema::dropIfExists('cards');
     }
 };

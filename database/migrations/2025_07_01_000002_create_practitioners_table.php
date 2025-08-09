@@ -10,13 +10,14 @@ return new class extends Migration
     {
         Schema::create('practitioners', function (Blueprint $table) {
             $table->id();
+            $table->ulid()->index();
             $table->string('code', 64)->unique();
             $table->boolean('active')->default(true);
             $table->json('name')->notNullable();
             $table->json('telecom')->nullable();
             $table->json('address')->nullable();
-            $table->string('gender', 20)->nullable();
-            $table->date('birth_date')->nullable();
+            $table->enum('sex', ['Female', 'Male'])->nullable();
+            $table->date('birthdate')->nullable();
             $table->json('qualification')->nullable();
             $table->json('communication')->nullable();
             $table->json('meta')->nullable();

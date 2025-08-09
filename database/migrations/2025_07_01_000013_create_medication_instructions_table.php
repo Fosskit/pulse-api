@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('medication_instructions', function (Blueprint $table) {
             $table->id();
+            $table->ulid()->index();
             $table->unsignedBigInteger('method_id')->index();
             $table->unsignedBigInteger('unit_id')->nullable()->index();
             $table->decimal('morning', 8, 2);

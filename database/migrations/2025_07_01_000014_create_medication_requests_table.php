@@ -12,7 +12,7 @@ return new class extends Migration
 
         Schema::create('medication_requests', function (Blueprint $table) {
             $table->id();
-            $table->string('code', 77)->nullable()->index();
+            $table->ulid()->index();
             $table->unsignedBigInteger('visit_id')->index();
             $table->unsignedBigInteger('status_id')->index();
             $table->unsignedBigInteger('intent_id')->index();

@@ -10,15 +10,15 @@ return new class extends Migration
     {
         Schema::create('visits', function (Blueprint $table) {
             $table->id();
-            $table->string('code', 77)->nullable()->index();
-            $table->unsignedBigInteger('patient_id')->index();
-            $table->unsignedBigInteger('health_facility_id')->index();
-            $table->unsignedBigInteger('visit_type_id')->nullable()->index();
-            $table->unsignedBigInteger('admission_type_id')->index();
+            $table->ulid()->index();
+            $table->foreignId('patient_id')->index();
+            $table->foreignId('facility_id')->index()->constrained('facilities')->cascadeOnDelete();
+            $table->foreignId('visit_type_id')->nullable()->index()->constrained('terms')->cascadeOnDelete();
+            $table->foreignId('admission_type_id')->index()->constrained('terms')->cascadeOnDelete();
             $table->datetime('admitted_at')->index();
             $table->datetime('discharged_at')->nullable()->index();
-            $table->unsignedBigInteger('discharge_type_id')->nullable()->index();
-            $table->unsignedBigInteger('visit_outcome_id')->nullable()->index();
+            $table->foreignId('discharge_type_id')->nullable()->index()->constrained('terms')->cascadeOnDelete();
+            $table->foreignId('visit_outcome_id')->nullable()->index()->constrained('terms')->cascadeOnDelete();
             $table->commonFields();
 
 

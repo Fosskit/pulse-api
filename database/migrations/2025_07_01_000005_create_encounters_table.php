@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('encounters', function (Blueprint $table) {
             $table->id();
-            $table->string('code', 77)->nullable()->index();
+            $table->ulid()->index();
             $table->unsignedBigInteger('visit_id')->index();
             $table->unsignedBigInteger('encounter_type_id')->nullable()->index()->comment('Admission, Discharge, Transfer');
             $table->boolean('is_new')->default(0)->index()->comment('Old Case, New Case');

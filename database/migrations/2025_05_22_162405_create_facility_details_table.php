@@ -11,9 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('facilities', function (Blueprint $table) {
+        Schema::create('facility_details', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->index()->unique();
+            $table->unsignedBigInteger('facility_id');
+            $table->string('name');
+            $table->unsignedBigInteger('level_id');
+            $table->unsignedBigInteger('type_id');
+            $table->unsignedBigInteger('operational_district_id');
+            $table->string('map_code');
             $table->commonFields();
         });
     }
@@ -23,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('facilities');
+        Schema::dropIfExists('facility_details');
     }
 };

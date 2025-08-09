@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('patient_identities', function (Blueprint $table) {
             $table->id();
+            $table->ulid()->index();
             $table->string('code');
             $table->unsignedBigInteger('patient_id')->index();
-            $table->unsignedBigInteger('card_id')->index();
+            $table->foreignId('card_id')->index()->constrained('cards')->cascadeOnDelete();
             $table->date('start_date')->index();
             $table->date('end_date')->nullable()->index();
             $table->json('detail');

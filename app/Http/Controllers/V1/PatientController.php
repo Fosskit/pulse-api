@@ -61,10 +61,10 @@ class PatientController extends BaseController
                 $this->createPatientIdentities($patient, $request->identities);
             }
 
-            // Attach disabilities if provided
-            if ($request->has('disabilities')) {
-                $patient->disabilities()->attach($request->disabilities);
-            }
+//            // Attach disabilities if provided
+//            if ($request->has('disabilities')) {
+//                $patient->disabilities()->attach($request->disabilities);
+//            }
 
             DB::commit();
 

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->date('birthdate')->index();
             $table->json('telecom')->nullable();
             $table->json('address')->nullable();
-            $table->string('sex')->index();
+            $table->enum('sex', ['Female', 'Male'])->index();
             $table->unsignedBigInteger('nationality_id')->index();
             $table->string('telephone', 20)->nullable()->index();
             $table->datetime('died_at')->index();

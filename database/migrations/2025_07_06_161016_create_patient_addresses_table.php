@@ -30,6 +30,7 @@ return new class extends Migration
                 ->constrained()->cascadeOnDelete();
             $table->string('street_address');
             $table->boolean('is_current')->default(true);
+            $table->foreignId('address_type_id')->constrained('terms')->cascadeOnDelete();
             $table->commonFields();
         });
     }
