@@ -13,21 +13,33 @@
   - Configure Scramble for OpenAPI documentation generation
   - _Requirements: All requirements need versioned API endpoints_
 
-- [ ] 2. Enhance Patient Management with comprehensive demographics and insurance
-  - [ ] 2.1 Extend Patient model with relationships and methods
+- [x] 2. Enhance Patient Management with comprehensive demographics and insurance
+
+
+
+
+
+  - [x] 2.1 Extend Patient model with relationships and methods
+
+
     - Add relationships to demographics, addresses, identities, and visits
     - Implement activeInsurance() method for current coverage determination
     - Add search scopes for patient code, demographics, and identity codes
     - _Requirements: 1.1, 1.2, 1.6_
 
-  - [ ] 2.2 Create Patient API endpoints with Action-based architecture
+  - [x] 2.2 Create Patient API endpoints with Action-based architecture
+
+
     - Implement CreatePatientAction for patient registration with demographics
     - Create UpdatePatientAction for patient information updates
     - Build SearchPatientsAction with filtering by demographics and identities
     - Develop GetPatientDetailsAction for comprehensive patient data retrieval
     - _Requirements: 1.1, 1.2, 1.3, 1.5, 1.6_
 
-  - [ ] 2.3 Implement patient insurance and payment type logic
+
+
+  - [x] 2.3 Implement patient insurance and payment type logic
+
     - Create logic to determine payment_type_id based on active insurance cards
     - Implement support for multiple patient_identities with date validity
     - Add automatic beneficiary status detection for invoice generation

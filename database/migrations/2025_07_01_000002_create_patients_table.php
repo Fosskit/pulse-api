@@ -13,6 +13,7 @@ return new class extends Migration
             $table->ulid()->index();
             $table->string('code')->index();
             $table->foreignId('facility_id')->index()->constrained('facilities');
+            $table->commonFields();
         });
     }
 

@@ -7,21 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Encounter extends Model
+class MedicationRequest extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'visit_id',
-        'encounter_type_id',
-        'encounter_form_id',
-        'started_at',
-        'ended_at',
-    ];
-
-    protected $casts = [
-        'started_at' => 'datetime',
-        'ended_at' => 'datetime',
+        'status_id',
+        'intent_id',
     ];
 
     // Relationships
@@ -30,8 +23,13 @@ class Encounter extends Model
         return $this->belongsTo(Visit::class);
     }
 
-    public function encounterType(): BelongsTo
+    public function status(): BelongsTo
     {
-        return $this->belongsTo(Term::class, 'encounter_type_id');
+        return $this->belongsTo(Term::class, 'status_id');
+    }
+
+    public function intent(): BelongsTo
+    {
+        return $this->belongsTo(Term::class, 'intent_id');
     }
 }

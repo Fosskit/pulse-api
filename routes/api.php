@@ -127,9 +127,12 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
         // Patient Management
         Route::apiResource('patients', PatientController::class);
         Route::prefix('patients')->name('patients.')->group(function () {
-            Route::get('search/{query}', [PatientController::class, 'search'])->name('search');
+            Route::get('code/{code}', [PatientController::class, 'showByCode'])->name('show-by-code');
             Route::get('{patient}/summary', [PatientController::class, 'summary'])->name('summary');
             Route::get('{patient}/visits', [PatientController::class, 'visits'])->name('visits');
+            Route::get('{patient}/insurance-status', [PatientController::class, 'insuranceStatus'])->name('insurance-status');
+            Route::post('{patient}/insurance', [PatientController::class, 'addInsurance'])->name('add-insurance');
+            Route::get('{patient}/beneficiary-status', [PatientController::class, 'beneficiaryStatus'])->name('beneficiary-status');
         });
 
         // Visit Management
