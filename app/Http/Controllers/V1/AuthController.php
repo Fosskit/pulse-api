@@ -9,7 +9,6 @@ use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Models\User;
 use App\Models\UserProvider;
 use App\StandardResponse;
-use http\Env\Response;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
@@ -171,7 +170,7 @@ class AuthController extends Controller
         }
 
         // Use Laravel's HTTP client to request Passport token
-        $response = \Illuminate\Support\Facades.Http::post(config('services.passport.login_endpoint', url('/oauth/token')), [
+        $response = \Illuminate\Support\Facades\Http::post(config('services.passport.login_endpoint', url('/oauth/token')), [
             'grant_type' => 'password',
             'client_id' => config('passport.password_client_id'),
             'client_secret' => config('passport.password_client_secret'),

@@ -89,7 +89,7 @@ class AppServiceProvider extends ServiceProvider
 
         VerifyEmail::createUrlUsing(static function (object $notifiable) {
             $url = url()->temporarySignedRoute(
-                'verification.verify',
+                'api.v1.auth.verification.verify',
                 now()->addMinutes(config('auth.verification.expire', 60)),
                 [
                     'ulid' => $notifiable->ulid,
