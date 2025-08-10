@@ -49,7 +49,7 @@ Route::get('/', function () {
 */
 
 Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(function () {
-    
+
     /*
     |--------------------------------------------------------------------------
     | Health Check Routes (Public)
@@ -57,7 +57,7 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
     */
     Route::get('health', [HealthController::class, 'health'])->name('health');
     Route::get('version', [HealthController::class, 'version'])->name('version');
-    
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Routes (Public)
@@ -69,21 +69,24 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
             ->name('provider.redirect');
         Route::get('login/{provider}/callback', [AuthController::class, 'callback'])
             ->name('provider.callback');
-        
+
         // Standard Authentication
         Route::post('login', [AuthController::class, 'login'])
             ->middleware('throttle:login')
             ->name('login');
         Route::post('register', [AuthController::class, 'register'])
             ->name('register');
-        
+        Route::post('refresh', [AuthController::class, 'refreshToken'])
+            ->middleware('throttle:5,1')
+            ->name('refresh');
+
         // Password Reset
         Route::post('forgot-password', [AuthController::class, 'sendResetPasswordLink'])
             ->middleware('throttle:5,1')
             ->name('password.email');
         Route::post('reset-password', [AuthController::class, 'resetPassword'])
             ->name('password.store');
-        
+
         // Email Verification
         Route::post('verification-notification', [AuthController::class, 'verificationNotification'])
             ->middleware('throttle:verification-notification')
@@ -99,7 +102,7 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
     |--------------------------------------------------------------------------
     */
     Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
-        
+
         // Authentication Management
         Route::prefix('auth')->name('auth.')->group(function () {
             Route::post('logout', [AuthController::class, 'logout'])->name('logout');
@@ -221,7 +224,7 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
                 Route::post('validate', [GazetteerController::class, 'validateAddress'])->name('validate');
                 Route::get('search', [GazetteerController::class, 'search'])->name('search');
                 Route::get('{id}/path', [GazetteerController::class, 'path'])->name('path');
-                
+
                 // Address search functionality
                 Route::get('addresses/search', [GazetteerController::class, 'searchAddresses'])->name('addresses.search');
                 Route::get('addresses/in-area', [GazetteerController::class, 'addressesInArea'])->name('addresses.in-area');

@@ -22,12 +22,12 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Configure API middleware stack
         $middleware->api(prepend: [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+
         ]);
 
         // Configure throttling for different API endpoints
         $middleware->throttleApi('api');
-        
+
         // Configure CORS for API routes
         $middleware->web(append: [
             \Illuminate\Http\Middleware\HandleCors::class,

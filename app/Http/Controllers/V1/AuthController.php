@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
@@ -47,7 +48,27 @@ class AuthController extends Controller
         $user->save();
         $user->assignRole('user');
         event(new Registered($user));
-        return $this->success(__('Successfully registered'));
+
+        // Issue Passport token using Password Grant
+        $response = Http::post(config('services.passport.login_endpoint', url('/oauth/token')), [
+            'grant_type' => 'password',
+            'client_id' => config('passport.password_client_id'),
+            'client_secret' => config('passport.password_client_secret'),
+            'username' => $request->email,
+            'password' => $request->password,
+            'scope' => '',
+        ]);
+
+        $tokenData = $response->json();
+
+        return response()->json([
+            'user' => $user,
+            'access_token' => $tokenData['access_token'] ?? null,
+            'refresh_token' => $tokenData['refresh_token'] ?? null,
+            'access_expires_at' => isset($tokenData['expires_in']) ? now()->addSeconds($tokenData['expires_in'])->toDateTimeString() : null,
+            'message' => __('Successfully registered'),
+            'ok' => true,
+        ]);
     }
 
     /**
@@ -118,11 +139,9 @@ class AuthController extends Controller
             $user = $userProvider->user;
         }
 
-        $token = $user->createDeviceToken(
-            device: $request->deviceName(),
-            ip: $request->ip(),
-            remember: true
-        );
+        // Issue Passport token for social login
+        $tokenResult = $user->createToken($request->deviceName() ?? 'oauth-device');
+        $token = $tokenResult->accessToken;
 
         return view('oauth', [
             'message' => [
@@ -137,13 +156,13 @@ class AuthController extends Controller
      * @unauthenticated
      * Login
      *
-     * Generating Sanctum token and return user and the token
+     * Generating Passport token and return user and the token
      * @throws ValidationException
      * @response array{user: User, access_token: string, access_expires_at: string}
      */
     public function login(LoginRequest $request): JsonResponse
     {
-        $user = User::query()->where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
@@ -151,23 +170,32 @@ class AuthController extends Controller
             ]);
         }
 
-        $tokenData = $user->createDeviceToken(
-            device: $request->deviceName(),
-            ip: $request->ip(),
-            remember: $request->input('remember', false)
-        );
-
-        return response()->json($tokenData);
+        // Use Laravel's HTTP client to request Passport token
+        $response = \Illuminate\Support\Facades.Http::post(config('services.passport.login_endpoint', url('/oauth/token')), [
+            'grant_type' => 'password',
+            'client_id' => config('passport.password_client_id'),
+            'client_secret' => config('passport.password_client_secret'),
+            'username' => $request->email,
+            'password' => $request->password,
+            'scope' => '',
+        ]);
+        $tokenData = $response->json();
+        return response()->json([
+            'user' => $user,
+            'access_token' => $tokenData['access_token'] ?? null,
+            'refresh_token' => $tokenData['refresh_token'] ?? null,
+            'access_expires_at' => isset($tokenData['expires_in']) ? now()->addSeconds($tokenData['expires_in'])->toDateTimeString() : null,
+        ]);
     }
 
     /**
      * Logout
      *
-     * Revoke token; only remove token that is used to perform logout (i.e. will not revoke all tokens)
+     * Revoke Passport token
      */
     public function logout(Request $request): JsonResponse
     {
-        $request->user()->currentAccessToken()->delete();
+        $request->user()->token()->revoke();
 
         return $this->success(__('Successfully logged out'));
     }
@@ -303,26 +331,22 @@ class AuthController extends Controller
     /**
      * Get Devices
      *
-     * Get authenticated user devices
+     * Get authenticated user devices (Passport tokens)
      */
     public function devices(Request $request): JsonResponse
     {
         $user = $request->user();
 
         $devices = $user->tokens()
-            ->select('id', 'name', 'ip', 'last_used_at')
-            ->orderBy('last_used_at', 'DESC')
+            ->select('id', 'name', 'revoked', 'created_at', 'expires_at')
+            ->orderBy('created_at', 'DESC')
             ->get();
 
-        $currentToken = $user->currentAccessToken();
+        $currentToken = $user->token();
 
         foreach ($devices as $device) {
             $device->hash = Crypt::encryptString($device->id);
-
-            if ($currentToken->id === $device->id) {
-                $device->is_current = true;
-            }
-
+            $device->is_current = ($currentToken && $currentToken->id === $device->id);
             unset($device->id);
         }
 
@@ -332,7 +356,7 @@ class AuthController extends Controller
     /**
      * Device Disconnect
      *
-     * Revoke token by id
+     * Revoke Passport token by id
      */
     public function deviceDisconnect(Request $request): JsonResponse
     {
@@ -341,13 +365,47 @@ class AuthController extends Controller
         ]);
 
         $user = $request->user();
-
         $id = (int) Crypt::decryptString($request->hash);
 
         if (!empty($id)) {
-            $user->tokens()->where('id', $id)->delete();
+            $user->tokens()->where('id', $id)->update(['revoked' => true]);
         }
 
-        return $this->success(__('Devices disconnected'));
+        return $this->success(__('Device disconnected'));
+    }
+
+    /**
+     * @unauthenticated
+     * Refresh Token
+     *
+     * Refresh access token using refresh token
+     */
+    public function refreshToken(Request $request): JsonResponse
+    {
+        $request->validate([
+            'refresh_token' => 'required|string',
+        ]);
+
+        $response = Http::post(url('/oauth/token'), [
+            'grant_type' => 'refresh_token',
+            'refresh_token' => $request->refresh_token,
+            'client_id' => config('passport.password_client_id'),
+            'client_secret' => config('passport.password_client_secret'),
+            'scope' => '',
+        ]);
+
+        $tokenData = $response->json();
+
+        if ($response->failed()) {
+            throw ValidationException::withMessages([
+                'refresh_token' => [__('Invalid refresh token')],
+            ]);
+        }
+
+        return response()->json([
+            'access_token' => $tokenData['access_token'] ?? null,
+            'refresh_token' => $tokenData['refresh_token'] ?? null,
+            'access_expires_at' => isset($tokenData['expires_in']) ? now()->addSeconds($tokenData['expires_in'])->toDateTimeString() : null,
+        ]);
     }
 }

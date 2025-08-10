@@ -19,9 +19,6 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Jenssegers\Agent\Agent;
-use Laravel\Sanctum\Sanctum;
-
-//use Laravel\Sanctum\Sanctum;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -125,9 +122,5 @@ class AppServiceProvider extends ServiceProvider
         Request::macro('deviceName', function (): string {
             return 'null';
         });
-
-        Sanctum::usePersonalAccessTokenModel(
-            PersonalAccessToken::class
-        );
     }
 }

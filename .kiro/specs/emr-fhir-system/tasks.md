@@ -116,8 +116,13 @@
     - Add encounter chronological display with timestamps
     - _Requirements: 4.2, 4.3, 4.4, 4.6_
 
-- [ ] 6. Enhance Clinical Forms integration with encounter workflow
+- [-] 6. Enhance Clinical Forms integration with encounter workflow
+
+
+
   - [ ] 6.1 Integrate existing ClinicalFormTemplate system with encounters
+
+
     - Create ProcessFormSubmissionAction to handle form data processing
     - Implement automatic observation generation from form submissions
     - Link form submissions to specific encounters and visits

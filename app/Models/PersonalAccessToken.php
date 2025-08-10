@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class PersonalAccessToken extends SanctumPersonalAccessToken
+class PersonalAccessToken
 {
     /**
      * Update the last_used_at field no more than 1 time per minute.
