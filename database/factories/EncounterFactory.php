@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Encounter;
-use App\Models\Term;
 use App\Models\Visit;
+use App\Models\Term;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -33,7 +33,7 @@ class EncounterFactory extends Factory
             'visit_id' => Visit::factory(),
             'encounter_type_id' => Term::factory(),
             'encounter_form_id' => $this->faker->numberBetween(1, 10),
-            'is_new' => $this->faker->boolean(),
+            'is_new' => $this->faker->boolean(30),
             'started_at' => $startedAt,
             'ended_at' => $this->faker->optional(0.7)->dateTimeBetween($startedAt, 'now'),
             'created_at' => now(),
@@ -57,9 +57,21 @@ class EncounterFactory extends Factory
     public function ended(): static
     {
         return $this->state(function (array $attributes) {
+            $endedAt = $this->faker->dateTimeBetween($attributes['started_at'], 'now');
+            
             return [
-                'ended_at' => $this->faker->dateTimeBetween($attributes['started_at'], 'now'),
+                'ended_at' => $endedAt,
             ];
         });
+    }
+
+    /**
+     * Indicate that this is a new case encounter.
+     */
+    public function newCase(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_new' => true,
+        ]);
     }
 }

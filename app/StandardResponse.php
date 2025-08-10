@@ -18,7 +18,7 @@ trait StandardResponse
     private function failure($message, $status = Response::HTTP_INTERNAL_SERVER_ERROR)
     {
         return response()->json([
-            'success' => true,
+            'success' => false,
             'message' => $message,
         ], $status);
     }

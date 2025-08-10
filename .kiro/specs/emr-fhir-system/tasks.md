@@ -88,12 +88,21 @@
     - Add facility utilization reporting functionality
     - _Requirements: 3.4, 3.5, 3.6_
 
-- [ ] 5. Develop Clinical Workflow Management
-  - [ ] 5.1 Implement visit management with admission and discharge
+- [x] 5. Develop Clinical Workflow Management
+
+
+
+
+
+  - [x] 5.1 Implement visit management with admission and discharge
+
+
     - Create AdmitPatientAction to generate visit and initial encounter
     - Implement DischargePatientAction with discharge details and outcomes
     - Add visit timeline and status tracking functionality
     - _Requirements: 4.1, 4.5, 4.6_
+
+
 
   - [ ] 5.2 Build encounter management system
     - Implement CreateEncounterAction for clinical activities

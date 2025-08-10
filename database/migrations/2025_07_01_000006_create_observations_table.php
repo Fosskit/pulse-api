@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('observation_status_id')->index();
             $table->unsignedBigInteger('concept_id')->index();
             $table->unsignedBigInteger('body_site_id')->nullable()->index();
+            $table->unsignedBigInteger('value_id')->nullable()->index();
             $table->string('value_string', 190)->nullable();
             $table->float('value_number')->nullable();
             $table->text('value_text')->nullable();

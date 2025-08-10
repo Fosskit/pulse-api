@@ -13,6 +13,7 @@ class Visit extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'ulid',
         'patient_id',
         'facility_id',
         'visit_type_id',
@@ -27,6 +28,17 @@ class Visit extends Model
         'admitted_at' => 'datetime',
         'discharged_at' => 'datetime',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($model) {
+            if (empty($model->ulid)) {
+                $model->ulid = \Illuminate\Support\Str::ulid();
+            }
+        });
+    }
 
     // Relationships
     public function patient(): BelongsTo

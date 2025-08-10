@@ -31,12 +31,12 @@ class DepartmentFactory extends Factory
             'name' => $this->faker->randomElement([
                 'Emergency Department',
                 'Internal Medicine',
-                'Pediatrics',
                 'Surgery',
+                'Pediatrics',
                 'Obstetrics & Gynecology',
+                'Intensive Care Unit',
                 'Radiology',
-                'Laboratory',
-                'Pharmacy'
+                'Laboratory'
             ]),
             'created_at' => now(),
             'updated_at' => now(),

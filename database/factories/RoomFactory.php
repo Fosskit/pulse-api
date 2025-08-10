@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Department;
 use App\Models\Room;
+use App\Models\Department;
 use App\Models\Term;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -29,16 +29,16 @@ class RoomFactory extends Factory
         return [
             'department_id' => Department::factory(),
             'room_type_id' => Term::factory(),
-            'code' => 'ROOM' . $this->faker->unique()->numberBetween(1000, 9999),
+            'code' => 'ROOM' . $this->faker->unique()->numberBetween(100, 999),
             'name' => $this->faker->randomElement([
-                'Emergency Room',
-                'Operating Theater',
-                'Patient Room',
-                'Consultation Room',
+                'Standard Room',
                 'ICU Room',
-                'Recovery Room',
-                'Examination Room'
-            ]) . ' ' . $this->faker->numberBetween(1, 20),
+                'Operating Theater',
+                'Emergency Room',
+                'Consultation Room',
+                'Laboratory',
+                'Radiology Room'
+            ]),
             'created_at' => now(),
             'updated_at' => now(),
         ];
