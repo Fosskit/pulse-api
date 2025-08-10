@@ -14,24 +14,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->prepend([
+            \Illuminate\Session\Middleware\StartSession::class,
+        ]);
         // Register API-specific middleware
         $middleware->alias([
             'api.version' => ApiVersionMiddleware::class,
             'api.middleware' => ApiMiddleware::class,
         ]);
 
-        // Configure API middleware stack
-        $middleware->api(prepend: [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-        ]);
-
-        // Configure throttling for different API endpoints
+        $middleware->statefulApi();
         $middleware->throttleApi('api');
-        
-        // Configure CORS for API routes
-        $middleware->web(append: [
-            \Illuminate\Http\Middleware\HandleCors::class,
-        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Configure API exception handling

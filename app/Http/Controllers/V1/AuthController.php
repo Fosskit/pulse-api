@@ -16,6 +16,7 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -143,21 +144,21 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request): JsonResponse
     {
-        $user = User::query()->where('email', $request->email)->first();
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
-            ]);
+        // Attempt to authenticate
+        if (Auth::attempt($credentials)) {
+            // THIS IS THE CRUCIAL PART
+            $request->session()->regenerate(); // This creates and attaches the cookie
+
+            return response()->json(['user' => Auth::user()]); // Then return the user
         }
 
-        $tokenData = $user->createDeviceToken(
-            device: $request->deviceName(),
-            ip: $request->ip(),
-            remember: $request->input('remember', false)
-        );
-
-        return response()->json($tokenData);
+        // If authentication fails
+        return response()->json(['email' => 'The provided credentials do not match our records.'], 422);
     }
 
     /**
