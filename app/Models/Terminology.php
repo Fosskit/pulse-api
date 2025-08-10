@@ -14,7 +14,6 @@ class Terminology extends Model
     protected $fillable = [
         'code',
         'name',
-        'name_kh',
         'parent_id',
         'description',
         'is_active',

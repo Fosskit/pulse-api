@@ -5,11 +5,15 @@ use App\Http\Controllers\V1\AccountController;
 use App\Http\Controllers\V1\AuthController;
 use App\Http\Controllers\V1\ClinicalFormController;
 use App\Http\Controllers\V1\DashboardController;
+use App\Http\Controllers\V1\DepartmentController;
 use App\Http\Controllers\V1\EncounterController;
+use App\Http\Controllers\V1\FacilityController;
+use App\Http\Controllers\V1\TransferController;
 use App\Http\Controllers\V1\GazetteerController;
 use App\Http\Controllers\V1\HealthController;
 use App\Http\Controllers\V1\ObservationController;
 use App\Http\Controllers\V1\PatientController;
+use App\Http\Controllers\V1\RoomController;
 use App\Http\Controllers\V1\UploadController;
 use Illuminate\Support\Facades\Route;
 
@@ -164,6 +168,29 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
         });
 
         Route::apiResource('observations', ObservationController::class)->only(['show', 'update', 'destroy']);
+
+        // Facility Management
+        Route::apiResource('facilities', FacilityController::class)->only(['index', 'show']);
+        Route::prefix('facilities')->name('facilities.')->group(function () {
+            Route::get('{facility}/departments', [FacilityController::class, 'departments'])->name('departments');
+            Route::get('{facility}/utilization', [FacilityController::class, 'utilization'])->name('utilization');
+        });
+
+        Route::apiResource('departments', DepartmentController::class)->only(['show']);
+        Route::prefix('departments')->name('departments.')->group(function () {
+            Route::get('{department}/rooms', [DepartmentController::class, 'rooms'])->name('rooms');
+        });
+
+        Route::apiResource('rooms', RoomController::class)->only(['show']);
+        Route::prefix('rooms')->name('rooms.')->group(function () {
+            Route::get('{room}/availability', [RoomController::class, 'availability'])->name('availability');
+        });
+
+        // Patient Transfer Management
+        Route::prefix('transfers')->name('transfers.')->group(function () {
+            Route::post('/', [TransferController::class, 'transfer'])->name('transfer');
+            Route::post('validate', [TransferController::class, 'validateTransfer'])->name('validate');
+        });
 
         // Reference Data & Taxonomy
         Route::prefix('reference')->name('reference.')->group(function () {

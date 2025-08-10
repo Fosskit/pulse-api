@@ -49,6 +49,7 @@
 
 
 
+
   - [x] 3.1 Create Gazetteer API endpoints with hierarchical filtering
 
 
@@ -66,14 +67,22 @@
     - Create address validation methods using gazetteer hierarchy
     - _Requirements: 2.5, 2.6_
 
-- [ ] 4. Build Facility Management system
-  - [ ] 4.1 Create facility, department, and room management endpoints
+- [x] 4. Build Facility Management system
+
+
+
+
+  - [x] 4.1 Create facility, department, and room management endpoints
+
+
     - Implement GetFacilitiesAction for facility listing
     - Create GetFacilityDepartmentsAction and GetDepartmentRoomsAction
     - Build CheckRoomAvailabilityAction for scheduling support
     - _Requirements: 3.1, 3.2, 3.4_
 
-  - [ ] 4.2 Implement room availability and transfer logic
+  - [x] 4.2 Implement room availability and transfer logic
+
+
     - Create room availability checking for appointments and transfers
     - Implement patient transfer validation with destination room verification
     - Add facility utilization reporting functionality

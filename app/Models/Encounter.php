@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Encounter extends Model
@@ -33,5 +34,10 @@ class Encounter extends Model
     public function encounterType(): BelongsTo
     {
         return $this->belongsTo(Term::class, 'encounter_type_id');
+    }
+
+    public function observations(): HasMany
+    {
+        return $this->hasMany(Observation::class);
     }
 }
