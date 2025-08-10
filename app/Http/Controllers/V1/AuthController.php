@@ -176,8 +176,13 @@ class AuthController extends Controller
             'client_secret' => config('passport.password_client_secret'),
             'username' => $request->email,
             'password' => $request->password,
-            'scope' => '',
+            'scope' => '*',
         ]);
+        if ($response->failed()) {
+            throw ValidationException::withMessages([
+                'email' => __('auth.failed'),
+            ]);
+        }
         $tokenData = $response->json();
         return response()->json([
             'user' => $user,
