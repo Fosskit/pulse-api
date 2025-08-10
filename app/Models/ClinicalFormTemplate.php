@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ClinicalFormTemplate extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -58,7 +59,7 @@ class ClinicalFormTemplate extends Model
                 $observation = [
                     'encounter_id' => $encounterId,
                     'patient_id' => $patientId,
-                    'observation_concept_id' => $fieldMapping['observation_concept_id'],
+                    'concept_id' => $fieldMapping['observation_concept_id'],
                     'observation_status_id' => $mapping['default_values']['observation_status_id'] ?? 1,
                     'body_site_id' => $fieldMapping['body_site_id'] ?? null,
                     'observed_at' => now(),

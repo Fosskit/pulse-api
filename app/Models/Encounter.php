@@ -54,4 +54,51 @@ class Encounter extends Model
     {
         return $this->hasMany(Observation::class);
     }
+
+    public function clinicalFormTemplate(): BelongsTo
+    {
+        return $this->belongsTo(ClinicalFormTemplate::class, 'encounter_form_id');
+    }
+
+    // Scopes
+    public function scopeActive($query)
+    {
+        return $query->whereNull('ended_at');
+    }
+
+    public function scopeByType($query, int $encounterTypeId)
+    {
+        return $query->where('encounter_type_id', $encounterTypeId);
+    }
+
+    public function scopeChronological($query)
+    {
+        return $query->orderBy('started_at');
+    }
+
+    public function scopeForVisit($query, int $visitId)
+    {
+        return $query->where('visit_id', $visitId);
+    }
+
+    // Accessors
+    public function getIsActiveAttribute(): bool
+    {
+        return is_null($this->ended_at);
+    }
+
+    public function getDurationMinutesAttribute(): ?int
+    {
+        if (!$this->started_at) {
+            return null;
+        }
+
+        $endTime = $this->ended_at ?? now();
+        return $this->started_at->diffInMinutes($endTime);
+    }
+
+    public function getStatusAttribute(): string
+    {
+        return $this->is_active ? 'active' : 'completed';
+    }
 }

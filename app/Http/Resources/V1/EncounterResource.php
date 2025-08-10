@@ -31,6 +31,16 @@ class EncounterResource extends JsonResource
                 ];
             }),
             
+            'clinical_form_template' => $this->whenLoaded('clinicalFormTemplate', function () {
+                return [
+                    'id' => $this->clinicalFormTemplate->id,
+                    'name' => $this->clinicalFormTemplate->name,
+                    'title' => $this->clinicalFormTemplate->title,
+                    'category' => $this->clinicalFormTemplate->category,
+                    'active' => $this->clinicalFormTemplate->active,
+                ];
+            }),
+            
             'observations' => $this->whenLoaded('observations', function () {
                 return ObservationResource::collection($this->observations);
             }),

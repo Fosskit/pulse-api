@@ -104,7 +104,12 @@
 
 
 
-  - [ ] 5.2 Build encounter management system
+  - [x] 5.2 Build encounter management system
+
+
+
+
+
     - Implement CreateEncounterAction for clinical activities
     - Create TransferPatientAction for department transfers
     - Build encounter linking to clinical forms and observations

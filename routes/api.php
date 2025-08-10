@@ -167,6 +167,8 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
                 ->name('forms.submit');
             Route::post('transfer', [EncounterController::class, 'transfer'])
                 ->name('transfer');
+            Route::post('transfer-patient', [EncounterController::class, 'transferPatient'])
+                ->name('transfer-patient');
         });
 
         // Visit encounters chronological view

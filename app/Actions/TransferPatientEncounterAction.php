@@ -47,7 +47,7 @@ class TransferPatientEncounterAction
             // Get transfer encounter type
             $transferEncounterType = Term::where('code', 'transfer')
                 ->whereHas('terminology', function ($query) {
-                    $query->where('name', 'encounter_types');
+                    $query->where('code', 'encounter_types');
                 })
                 ->first();
 
@@ -80,6 +80,7 @@ class TransferPatientEncounterAction
             return $transferEncounter->load([
                 'visit.patient',
                 'encounterType',
+                'clinicalFormTemplate',
                 'observations'
             ]);
         });

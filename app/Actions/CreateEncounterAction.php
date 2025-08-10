@@ -33,6 +33,7 @@ class CreateEncounterAction
             return $encounter->load([
                 'visit.patient',
                 'encounterType',
+                'clinicalFormTemplate',
                 'observations'
             ]);
         });
