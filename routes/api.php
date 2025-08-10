@@ -6,6 +6,7 @@ use App\Http\Controllers\V1\AuthController;
 use App\Http\Controllers\V1\ClinicalFormController;
 use App\Http\Controllers\V1\DashboardController;
 use App\Http\Controllers\V1\EncounterController;
+use App\Http\Controllers\V1\GazetteerController;
 use App\Http\Controllers\V1\HealthController;
 use App\Http\Controllers\V1\ObservationController;
 use App\Http\Controllers\V1\PatientController;
@@ -178,32 +179,19 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
 
             // Gazetteer (Cambodia Address System)
             Route::prefix('gazetteers')->name('gazetteers.')->group(function () {
-                Route::get('provinces', function() {
-                    return \App\Models\Gazetteer::where('type', 'Province')
-                        ->orderBy('name')
-                        ->get(['id', 'name', 'code', 'parent_id']);
-                })->name('provinces');
+                Route::get('provinces', [GazetteerController::class, 'provinces'])->name('provinces');
+                Route::get('districts/{province_id}', [GazetteerController::class, 'districts'])->name('districts');
+                Route::get('communes/{district_id}', [GazetteerController::class, 'communes'])->name('communes');
+                Route::get('villages/{commune_id}', [GazetteerController::class, 'villages'])->name('villages');
+                Route::post('validate', [GazetteerController::class, 'validateAddress'])->name('validate');
+                Route::get('search', [GazetteerController::class, 'search'])->name('search');
+                Route::get('{id}/path', [GazetteerController::class, 'path'])->name('path');
                 
-                Route::get('districts/{province_id}', function($province_id) {
-                    return \App\Models\Gazetteer::where('type', 'District')
-                        ->where('parent_id', $province_id)
-                        ->orderBy('name')
-                        ->get(['id', 'name', 'code', 'parent_id']);
-                })->name('districts');
-                
-                Route::get('communes/{district_id}', function($district_id) {
-                    return \App\Models\Gazetteer::where('type', 'Commune')
-                        ->where('parent_id', $district_id)
-                        ->orderBy('name')
-                        ->get(['id', 'name', 'code', 'parent_id']);
-                })->name('communes');
-                
-                Route::get('villages/{commune_id}', function($commune_id) {
-                    return \App\Models\Gazetteer::where('type', 'Village')
-                        ->where('parent_id', $commune_id)
-                        ->orderBy('name')
-                        ->get(['id', 'name', 'code', 'parent_id']);
-                })->name('villages');
+                // Address search functionality
+                Route::get('addresses/search', [GazetteerController::class, 'searchAddresses'])->name('addresses.search');
+                Route::get('addresses/in-area', [GazetteerController::class, 'addressesInArea'])->name('addresses.in-area');
+                Route::get('addresses/statistics', [GazetteerController::class, 'addressStatistics'])->name('addresses.statistics');
+                Route::post('addresses/validate', [GazetteerController::class, 'validatePatientAddress'])->name('addresses.validate');
             });
         });
     });
