@@ -130,7 +130,12 @@ class EncounterController extends Controller
                 [
                     'encounter' => new EncounterResource($result['encounter']),
                     'observations' => ObservationResource::collection($result['observations']),
-                    'observations_created' => $result['observations_created']
+                    'observations_created' => $result['observations_created'],
+                    'form_data' => $result['form_data'],
+                    'validated_data' => $result['validated_data'],
+                    'validation_summary' => $result['validation_summary'],
+                    'observation_summary' => $result['observation_summary'],
+                    'form_completion_tracked' => $result['form_completion_tracked'],
                 ]
             );
         } catch (\Exception $e) {
