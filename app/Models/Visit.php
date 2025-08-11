@@ -91,6 +91,16 @@ class Visit extends Model
         return $this->hasMany(Invoice::class);
     }
 
+    public function medicationDispenses(): HasMany
+    {
+        return $this->hasMany(MedicationDispense::class);
+    }
+
+    public function medicationAdministrations(): HasMany
+    {
+        return $this->hasMany(MedicationAdministration::class);
+    }
+
     // Accessors
     public function getIsActiveAttribute(): bool
     {

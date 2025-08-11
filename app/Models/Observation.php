@@ -17,6 +17,7 @@ class Observation extends Model
         'parent_id',
         'patient_id',
         'encounter_id',
+        'service_request_id',
         'code',
         'observation_status_id',
         'concept_id',
@@ -27,14 +28,26 @@ class Observation extends Model
         'value_text',
         'value_complex',
         'value_datetime',
+        'value_boolean',
+        'reference_range_low',
+        'reference_range_high',
+        'reference_range_text',
+        'interpretation',
+        'comments',
         'observed_at',
         'observed_by',
+        'verified_at',
+        'verified_by',
     ];
 
     protected $casts = [
         'value_complex' => 'array',
         'value_datetime' => 'datetime',
+        'value_boolean' => 'boolean',
         'observed_at' => 'datetime',
+        'verified_at' => 'datetime',
+        'reference_range_low' => 'float',
+        'reference_range_high' => 'float',
     ];
 
     protected static function boot()
@@ -57,6 +70,11 @@ class Observation extends Model
     public function encounter(): BelongsTo
     {
         return $this->belongsTo(Encounter::class);
+    }
+
+    public function serviceRequest(): BelongsTo
+    {
+        return $this->belongsTo(ServiceRequest::class);
     }
 
     public function observationConcept(): BelongsTo

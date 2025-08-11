@@ -8,12 +8,15 @@ use App\Http\Controllers\V1\DashboardController;
 use App\Http\Controllers\V1\DepartmentController;
 use App\Http\Controllers\V1\EncounterController;
 use App\Http\Controllers\V1\FacilityController;
+use App\Http\Controllers\V1\InvoiceController;
+use App\Http\Controllers\V1\PaymentController;
 use App\Http\Controllers\V1\TransferController;
 use App\Http\Controllers\V1\GazetteerController;
 use App\Http\Controllers\V1\HealthController;
 use App\Http\Controllers\V1\ObservationController;
 use App\Http\Controllers\V1\PatientController;
 use App\Http\Controllers\V1\RoomController;
+use App\Http\Controllers\V1\ServiceRequestController;
 use App\Http\Controllers\V1\UploadController;
 use Illuminate\Support\Facades\Route;
 
@@ -141,6 +144,10 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
             Route::get('{patient}/insurance-status', [PatientController::class, 'insuranceStatus'])->name('insurance-status');
             Route::post('{patient}/insurance', [PatientController::class, 'addInsurance'])->name('add-insurance');
             Route::get('{patient}/beneficiary-status', [PatientController::class, 'beneficiaryStatus'])->name('beneficiary-status');
+            Route::get('{patient}/medications', [\App\Http\Controllers\V1\MedicationController::class, 'getPatientMedicationHistory'])->name('medications');
+            Route::get('{patient}/active-prescriptions', [\App\Http\Controllers\V1\MedicationController::class, 'getActivePrescriptions'])->name('active-prescriptions');
+            Route::get('{patient}/medication-summary', [\App\Http\Controllers\V1\MedicationController::class, 'getMedicationSummary'])->name('medication-summary');
+            Route::get('{patient}/administrations', [\App\Http\Controllers\V1\MedicationController::class, 'getPatientAdministrations'])->name('administrations');
         });
 
         // Visit Management
@@ -148,6 +155,9 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
         Route::prefix('visits')->name('visits.')->group(function () {
             Route::get('{visit}/timeline', [VisitController::class, 'timeline'])->name('timeline');
             Route::post('{visit}/discharge', [VisitController::class, 'discharge'])->name('discharge');
+            Route::get('{visit}/medications', [\App\Http\Controllers\V1\MedicationController::class, 'getVisitMedications'])->name('medications');
+            Route::get('{visit}/pending-dispenses', [\App\Http\Controllers\V1\MedicationController::class, 'getPendingDispenses'])->name('pending-dispenses');
+            Route::get('{visit}/administrations', [\App\Http\Controllers\V1\MedicationController::class, 'getVisitAdministrations'])->name('administrations');
         });
 
         // Clinical Forms
@@ -179,6 +189,58 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
             ->name('visits.encounters.chronological');
 
         Route::apiResource('observations', ObservationController::class)->only(['show', 'update', 'destroy']);
+
+        // Medication Management
+        Route::prefix('prescriptions')->name('prescriptions.')->group(function () {
+            Route::post('/', [\App\Http\Controllers\V1\MedicationController::class, 'createPrescription'])->name('create');
+        });
+
+        Route::prefix('medications')->name('medications.')->group(function () {
+            Route::post('dispense', [\App\Http\Controllers\V1\MedicationController::class, 'dispenseMedication'])->name('dispense');
+            Route::post('administer', [\App\Http\Controllers\V1\MedicationController::class, 'recordAdministration'])->name('administer');
+            Route::get('safety-check/{patient}/{medication}', [\App\Http\Controllers\V1\MedicationController::class, 'validateMedicationSafety'])->name('safety-check');
+        });
+
+        // Service Request Management
+        Route::prefix('service-requests')->name('service-requests.')->group(function () {
+            Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
+            Route::post('/', [ServiceRequestController::class, 'store'])->name('store');
+            Route::get('pending', [ServiceRequestController::class, 'pending'])->name('pending');
+            Route::get('type/{type}', [ServiceRequestController::class, 'byType'])->name('by-type');
+            Route::get('{serviceRequest}', [ServiceRequestController::class, 'show'])->name('show');
+            Route::put('{serviceRequest}/results', [ServiceRequestController::class, 'updateResults'])->name('update-results');
+            Route::put('{serviceRequest}/complete', [ServiceRequestController::class, 'complete'])->name('complete');
+        });
+
+        // Visit service requests
+        Route::prefix('visits')->name('visits.')->group(function () {
+            Route::post('{visit}/service-requests', [ServiceRequestController::class, 'store'])->name('service-requests.create');
+            Route::get('{visit}/pending-requests', [ServiceRequestController::class, 'pending'])->name('pending-requests');
+        });
+
+        // Billing and Invoice Management
+        Route::prefix('invoices')->name('invoices.')->group(function () {
+            Route::get('{invoice}', [\App\Http\Controllers\V1\InvoiceController::class, 'show'])->name('show');
+            Route::post('{invoice}/payments', [\App\Http\Controllers\V1\PaymentController::class, 'recordPayment'])->name('payments.record');
+            Route::get('{invoice}/payments', [\App\Http\Controllers\V1\PaymentController::class, 'getInvoicePayments'])->name('payments.list');
+            Route::get('{invoice}/payment-summary', [\App\Http\Controllers\V1\PaymentController::class, 'getPaymentSummary'])->name('payment-summary');
+            Route::get('{invoice}/calculate-discounts', [\App\Http\Controllers\V1\PaymentController::class, 'calculateDiscounts'])->name('calculate-discounts');
+            Route::post('{invoice}/insurance-claim', [\App\Http\Controllers\V1\PaymentController::class, 'generateInsuranceClaim'])->name('insurance-claim');
+        });
+
+        Route::prefix('payments')->name('payments.')->group(function () {
+            Route::post('{payment}/refund', [\App\Http\Controllers\V1\PaymentController::class, 'processRefund'])->name('refund');
+        });
+
+        Route::prefix('visits')->name('visits.')->group(function () {
+            Route::post('{visit}/invoices', [\App\Http\Controllers\V1\InvoiceController::class, 'generateForVisit'])->name('invoices.generate');
+            Route::get('{visit}/invoices', [\App\Http\Controllers\V1\InvoiceController::class, 'getVisitInvoices'])->name('invoices.list');
+        });
+
+        Route::prefix('patients')->name('patients.')->group(function () {
+            Route::get('{patient}/billing-history', [\App\Http\Controllers\V1\InvoiceController::class, 'getPatientBillingHistory'])->name('billing-history');
+            Route::get('{patient}/billing-summary', [\App\Http\Controllers\V1\PaymentController::class, 'getBillingHistory'])->name('billing-summary');
+        });
 
         // Facility Management
         Route::apiResource('facilities', FacilityController::class)->only(['index', 'show']);

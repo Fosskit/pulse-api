@@ -134,40 +134,40 @@
     - Add form completion tracking and clinical documentation workflow
     - _Requirements: 9.1, 9.2, 9.3, 9.5, 9.6_
 
-- [ ] 7. Implement Medication Management system
-  - [ ] 7.1 Create medication prescription and instruction management
+- [x] 7. Implement Medication Management system
+  - [x] 7.1 Create medication prescription and instruction management
     - Implement CreatePrescriptionAction for medication requests
     - Build medication instruction creation with dosage scheduling
     - Add medication history retrieval for patient visits
     - _Requirements: 5.1, 5.2, 5.5_
 
-  - [ ] 7.2 Build medication dispensing and administration tracking
+  - [x] 7.2 Build medication dispensing and administration tracking
     - Create DispenseMedicationAction for pharmacy dispensing
     - Implement medication administration recording (create medication_administrations table)
     - Add medication validation against allergies and drug interactions
     - _Requirements: 5.3, 5.4, 5.6_
 
-- [ ] 8. Develop Service Request Management
-  - [ ] 8.1 Create service request system for lab, imaging, and procedures
+- [x] 8. Develop Service Request Management
+  - [x] 8.1 Create service request system for lab, imaging, and procedures
     - Implement CreateServiceRequestAction for different request types
     - Build service request linking to laboratory_requests, imaging_requests, procedures tables
     - Add service request status tracking and completion workflow
     - _Requirements: 6.1, 6.2, 6.3, 6.5, 6.6_
 
-  - [ ] 8.2 Implement service results and completion tracking
+  - [x] 8.2 Implement service results and completion tracking
     - Create UpdateServiceResultsAction for test results recording
     - Build result linking through observations table with reference ranges
     - Add pending request filtering and completion status updates
     - _Requirements: 6.4, 6.5, 6.6_
 
-- [ ] 9. Build Billing and Invoice Management
-  - [ ] 9.1 Create invoice generation based on services and insurance
+- [x] 9. Build Billing and Invoice Management
+  - [x] 9.1 Create invoice generation based on services and insurance
     - Implement GenerateInvoiceAction for visit-based billing
     - Build automatic invoice_items creation for services provided
     - Add payment_type_id determination based on patient insurance status
     - _Requirements: 7.1, 7.2, 7.4_
 
-  - [ ] 9.2 Implement insurance discount calculation and payment processing
+  - [x] 9.2 Implement insurance discount calculation and payment processing
     - Create CalculateDiscountsAction for insurance coverage discounts
     - Implement RecordPaymentAction for payment transaction processing
     - Build billing history retrieval with totals and remaining balances

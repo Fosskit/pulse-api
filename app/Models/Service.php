@@ -41,4 +41,12 @@ class Service extends Model
     {
         return $this->department();
     }
+
+    /**
+     * Get all invoice items for this service.
+     */
+    public function invoiceItems()
+    {
+        return $this->morphMany(InvoiceItem::class, 'invoiceable');
+    }
 }
