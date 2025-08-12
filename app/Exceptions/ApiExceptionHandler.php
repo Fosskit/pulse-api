@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\ClinicalException;
+use App\Services\ClinicalLoggingService;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -22,6 +24,13 @@ use Throwable;
  */
 class ApiExceptionHandler
 {
+    protected ClinicalLoggingService $clinicalLogger;
+
+    public function __construct(ClinicalLoggingService $clinicalLogger)
+    {
+        $this->clinicalLogger = $clinicalLogger;
+    }
+
     /**
      * Render an exception into an HTTP response for API routes
      *
@@ -33,19 +42,15 @@ class ApiExceptionHandler
     {
         $traceId = Str::uuid()->toString();
         
-        // Log the exception with trace ID for debugging
-        logger()->error('API Exception', [
-            'trace_id' => $traceId,
-            'exception' => get_class($e),
-            'message' => $e->getMessage(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'url' => $request->fullUrl(),
-            'method' => $request->method(),
-            'user_id' => auth()->id(),
-        ]);
+        // Log the exception with comprehensive context
+        $this->logException($e, $request, $traceId);
 
         return match (true) {
+            $e instanceof \App\Exceptions\PatientSafetyException => $this->handleClinicalException($e, $traceId),
+            $e instanceof \App\Exceptions\ClinicalWorkflowException => $this->handleClinicalException($e, $traceId),
+            $e instanceof \App\Exceptions\DataIntegrityException => $this->handleClinicalException($e, $traceId),
+            $e instanceof \App\Exceptions\BusinessRuleException => $this->handleClinicalException($e, $traceId),
+            $e instanceof ClinicalException => $this->handleClinicalException($e, $traceId),
             $e instanceof ValidationException => $this->handleValidationException($e, $traceId),
             $e instanceof AuthenticationException => $this->handleAuthenticationException($e, $traceId),
             $e instanceof ModelNotFoundException => $this->handleModelNotFoundException($e, $traceId),
@@ -208,6 +213,102 @@ class ApiExceptionHandler
                 'trace_id' => $traceId,
             ]
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * Handle clinical exceptions
+     */
+    private function handleClinicalException(ClinicalException $e, string $traceId): JsonResponse
+    {
+        // Log clinical exception with additional context
+        $this->clinicalLogger->logSecurityEvent(
+            'Clinical Exception: ' . $e->getErrorCode(),
+            'error',
+            array_merge($e->getContext(), ['trace_id' => $traceId])
+        );
+
+        $statusCode = $e->getCode() ?: Response::HTTP_UNPROCESSABLE_ENTITY;
+        
+        return response()->json([
+            'success' => false,
+            'error' => [
+                'code' => $e->getErrorCode(),
+                'message' => $e->getMessage(),
+                'details' => $e->getContext(),
+            ],
+            'meta' => [
+                'timestamp' => now()->utc()->format('Y-m-d\TH:i:s.u\Z'),
+                'version' => 'v1',
+                'trace_id' => $traceId,
+            ]
+        ], $statusCode);
+    }
+
+    /**
+     * Log exception with comprehensive context
+     */
+    private function logException(Throwable $e, Request $request, string $traceId): void
+    {
+        $context = [
+            'trace_id' => $traceId,
+            'exception' => get_class($e),
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'url' => $request->fullUrl(),
+            'method' => $request->method(),
+            'user_id' => auth()->id(),
+            'user_email' => auth()->user()?->email,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'request_data' => $this->sanitizeRequestData($request),
+        ];
+
+        // Log to appropriate channels based on exception type
+        if ($e instanceof ClinicalException) {
+            $this->clinicalLogger->logCriticalError('Clinical Exception', $e, $context);
+        } elseif ($e instanceof AuthenticationException) {
+            $this->clinicalLogger->logSecurityEvent('Authentication Exception', 'warning', $context);
+        } else {
+            logger()->error('API Exception', $context);
+        }
+
+        // Log API request details
+        $this->clinicalLogger->logApiRequest(
+            $request->method(),
+            $request->path(),
+            500, // Default to 500 for exceptions
+            0, // Duration not available at this point
+            ['trace_id' => $traceId, 'exception' => get_class($e)]
+        );
+    }
+
+    /**
+     * Sanitize request data for logging (remove sensitive information)
+     */
+    private function sanitizeRequestData(Request $request): array
+    {
+        $data = $request->all();
+        
+        // Remove sensitive fields
+        $sensitiveFields = [
+            'password',
+            'password_confirmation',
+            'token',
+            'api_key',
+            'secret',
+            'credit_card',
+            'ssn',
+            'social_security_number',
+        ];
+
+        foreach ($sensitiveFields as $field) {
+            if (isset($data[$field])) {
+                $data[$field] = '[REDACTED]';
+            }
+        }
+
+        return $data;
     }
 
     /**

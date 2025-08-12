@@ -190,10 +190,10 @@ class PatientAddress extends Model
     {
         $parts = array_filter([
             $this->street_address, // Street address typically stays in original language
-            $this->village?->name_kh ?? $this->village?->name,
-            $this->commune?->name_kh ?? $this->commune?->name,
-            $this->district?->name_kh ?? $this->district?->name,
-            $this->province?->name_kh ?? $this->province?->name,
+            $this->village?->name,
+            $this->commune?->name,
+            $this->district?->name,
+            $this->province?->name,
         ]);
 
         return implode(', ', $parts);

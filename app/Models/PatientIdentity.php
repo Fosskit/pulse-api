@@ -12,6 +12,7 @@ class PatientIdentity extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'ulid',
         'code',
         'patient_id',
         'card_id',
@@ -25,6 +26,17 @@ class PatientIdentity extends Model
         'end_date' => 'date',
         'detail' => 'array',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($model) {
+            if (empty($model->ulid)) {
+                $model->ulid = \Illuminate\Support\Str::ulid();
+            }
+        });
+    }
 
     // Relationships
     public function patient(): BelongsTo

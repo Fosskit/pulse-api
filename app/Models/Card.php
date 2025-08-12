@@ -11,7 +11,10 @@ class Card extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
+        'ulid',
         'code',
         'card_type_id',
         'issue_date',
@@ -22,6 +25,17 @@ class Card extends Model
         'issue_date' => 'date',
         'expiry_date' => 'date',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($model) {
+            if (empty($model->ulid)) {
+                $model->ulid = \Illuminate\Support\Str::ulid();
+            }
+        });
+    }
 
     // Relationships
     public function cardType(): BelongsTo

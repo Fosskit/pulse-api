@@ -155,7 +155,6 @@ class RolePermissionSeeder extends Seeder
             'email' => 'vengence@openpulse.org',
             'username' => 'vengence',
             'password' => bcrypt('password'),
-            'is_active' => true,
             'email_verified_at' => '2025-07-07 16:24:52'
         ]);
 

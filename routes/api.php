@@ -7,6 +7,7 @@ use App\Http\Controllers\V1\ClinicalFormController;
 use App\Http\Controllers\V1\DashboardController;
 use App\Http\Controllers\V1\DepartmentController;
 use App\Http\Controllers\V1\EncounterController;
+use App\Http\Controllers\V1\ExportController;
 use App\Http\Controllers\V1\FacilityController;
 use App\Http\Controllers\V1\InvoiceController;
 use App\Http\Controllers\V1\PaymentController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\V1\TransferController;
 use App\Http\Controllers\V1\GazetteerController;
 use App\Http\Controllers\V1\HealthController;
 use App\Http\Controllers\V1\ObservationController;
+use App\Http\Controllers\SystemHealthController;
 use App\Http\Controllers\V1\PatientController;
 use App\Http\Controllers\V1\RoomController;
 use App\Http\Controllers\V1\ServiceRequestController;
@@ -51,7 +53,19 @@ Route::get('/', function () {
 |
 */
 
-Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(function () {
+Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1', 'api.rate_limit:api'])->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | System Health Check Routes (Public)
+    |--------------------------------------------------------------------------
+    */
+    Route::get('ping', [SystemHealthController::class, 'ping'])->name('ping');
+    Route::get('/system/ping', [SystemHealthController::class, 'ping'])->name('system.ping');
+    Route::get('/system/health', [SystemHealthController::class, 'health'])->name('system.health');
+    Route::get('/system/metrics', [SystemHealthController::class, 'metrics'])->name('system.metrics');
+    Route::get('/system/ready', [SystemHealthController::class, 'ready'])->name('system.ready');
+    Route::get('/system/live', [SystemHealthController::class, 'live'])->name('system.live');
 
     /*
     |--------------------------------------------------------------------------
@@ -75,27 +89,29 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
 
         // Standard Authentication
         Route::post('login', [AuthController::class, 'login'])
-            ->middleware('throttle:login')
+            ->middleware('api.rate_limit:login')
             ->name('login');
         Route::post('register', [AuthController::class, 'register'])
+            ->middleware('api.rate_limit:register')
             ->name('register');
         Route::post('refresh', [AuthController::class, 'refreshToken'])
-            ->middleware('throttle:5,1')
+            ->middleware('api.rate_limit:sensitive')
             ->name('refresh');
 
         // Password Reset
         Route::post('forgot-password', [AuthController::class, 'sendResetPasswordLink'])
-            ->middleware('throttle:5,1')
+            ->middleware('api.rate_limit:password-reset')
             ->name('password.email');
         Route::post('reset-password', [AuthController::class, 'resetPassword'])
+            ->middleware('api.rate_limit:password-reset')
             ->name('password.store');
 
         // Email Verification
         Route::post('verification-notification', [AuthController::class, 'verificationNotification'])
-            ->middleware('throttle:verification-notification')
+            ->middleware('api.rate_limit:verification-notification')
             ->name('verification.send');
         Route::get('verify-email/{ulid}/{hash}', [AuthController::class, 'verifyEmail'])
-            ->middleware(['signed', 'throttle:6,1'])
+            ->middleware(['signed', 'api.rate_limit:sensitive'])
             ->name('verification.verify');
     });
 
@@ -104,7 +120,7 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
     | Protected Routes (Require Authentication)
     |--------------------------------------------------------------------------
     */
-    Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function () {
 
         // Authentication Management
         Route::prefix('auth')->name('auth.')->group(function () {
@@ -122,7 +138,7 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
         });
 
         // File Upload
-        Route::middleware(['throttle:uploads'])->group(function () {
+        Route::middleware(['api.rate_limit:uploads'])->group(function () {
             Route::post('upload', [UploadController::class, 'image'])->name('upload.image');
         });
 
@@ -136,7 +152,8 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
         });
 
         // Patient Management
-        Route::apiResource('patients', PatientController::class);
+        Route::apiResource('patients', PatientController::class)
+            ->middleware('permission:view-patients,create-patients,edit-patients,delete-patients');
         Route::prefix('patients')->name('patients.')->group(function () {
             Route::get('code/{code}', [PatientController::class, 'showByCode'])->name('show-by-code');
             Route::get('{patient}/summary', [PatientController::class, 'summary'])->name('summary');
@@ -151,7 +168,8 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
         });
 
         // Visit Management
-        Route::apiResource('visits', VisitController::class);
+        Route::apiResource('visits', VisitController::class)
+            ->middleware('permission:view-visits,create-visits,edit-visits,delete-visits');
         Route::prefix('visits')->name('visits.')->group(function () {
             Route::get('{visit}/timeline', [VisitController::class, 'timeline'])->name('timeline');
             Route::post('{visit}/discharge', [VisitController::class, 'discharge'])->name('discharge');
@@ -172,7 +190,8 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
             ->name('clinical-forms.statistics');
 
         // Encounters & Observations
-        Route::apiResource('encounters', EncounterController::class);
+        Route::apiResource('encounters', EncounterController::class)
+            ->middleware('permission:view-encounters,create-encounters,edit-encounters,delete-encounters');
         Route::prefix('encounters')->name('encounters.')->group(function () {
             Route::get('{encounter}/observations', [EncounterController::class, 'observations'])
                 ->name('observations');
@@ -240,6 +259,13 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1'])->group(func
         Route::prefix('patients')->name('patients.')->group(function () {
             Route::get('{patient}/billing-history', [\App\Http\Controllers\V1\InvoiceController::class, 'getPatientBillingHistory'])->name('billing-history');
             Route::get('{patient}/billing-summary', [\App\Http\Controllers\V1\PaymentController::class, 'getBillingHistory'])->name('billing-summary');
+        });
+
+        // Data Export Management
+        Route::prefix('exports')->name('exports.')->group(function () {
+            Route::get('visits/{visit}', [ExportController::class, 'exportVisit'])->name('visit');
+            Route::get('patients/{patient}/visits', [ExportController::class, 'exportPatientVisits'])->name('patient-visits');
+            Route::post('bulk', [ExportController::class, 'bulkExport'])->name('bulk');
         });
 
         // Facility Management

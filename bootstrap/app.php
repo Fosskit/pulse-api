@@ -5,6 +5,11 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\ApiVersionMiddleware;
 use App\Http\Middleware\ApiMiddleware;
+use App\Http\Middleware\ApiLoggingMiddleware;
+use App\Http\Middleware\ApiRateLimitMiddleware;
+use App\Http\Middleware\CheckPermissionMiddleware;
+use App\Http\Middleware\ValidateApiRequestMiddleware;
+use App\Http\Middleware\AuditPatientDataMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,11 +23,18 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'api.version' => ApiVersionMiddleware::class,
             'api.middleware' => ApiMiddleware::class,
+            'api.logging' => ApiLoggingMiddleware::class,
+            'api.rate_limit' => ApiRateLimitMiddleware::class,
+            'permission' => CheckPermissionMiddleware::class,
+            'api.validate' => ValidateApiRequestMiddleware::class,
+            'audit.patient' => AuditPatientDataMiddleware::class,
         ]);
 
         // Configure API middleware stack
         $middleware->api(prepend: [
-
+            ValidateApiRequestMiddleware::class,
+            ApiLoggingMiddleware::class,
+            AuditPatientDataMiddleware::class,
         ]);
 
         // Configure throttling for different API endpoints
@@ -36,7 +48,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         // Configure API exception handling
         $exceptions->render(function (Throwable $e, $request) {
-            if ($request->is('api/*')) {
+            if ($request->is('api/*') || $request->is('test/*')) {
                 return app(\App\Exceptions\ApiExceptionHandler::class)->render($request, $e);
             }
         });

@@ -174,45 +174,45 @@
     - Add insurance claims generation using patient identity data
     - _Requirements: 7.3, 7.4, 7.5, 7.6_
 
-- [ ] 10. Develop comprehensive data export system
-  - [ ] 10.1 Create visit export matching visit-sample.json structure
+- [x] 10. Develop comprehensive data export system
+  - [x] 10.1 Create visit export matching visit-sample.json structure
     - Implement ExportVisitAction to generate complete JSON documents
     - Build comprehensive data aggregation including all related entities
     - Add nested address structure with gazetteer information
     - Include patient identifications array with card details
     - _Requirements: 8.1, 8.2_
 
-  - [ ] 10.2 Implement detailed clinical and service data export
+  - [x] 10.2 Implement detailed clinical and service data export
     - Create export for all encounter types (outpatients, inpatients, emergencies, surgeries, progress_notes)
     - Build triages, vital signs, SOAP notes, and physical examination export
     - Add laboratory and imaging results with verification details
     - Include detailed invoice information with services and medications
     - _Requirements: 8.3, 8.4, 8.5, 8.6_
 
-- [ ] 11. Implement comprehensive testing suite
-  - [ ] 11.1 Create unit tests for all Action classes
+- [x] 11. Implement comprehensive testing suite
+  - [x] 11.1 Create unit tests for all Action classes
     - Write tests for patient management actions
     - Create tests for clinical workflow actions
     - Build tests for medication and service request actions
     - Add tests for billing and export actions
     - _Requirements: All requirements need comprehensive testing_
 
-  - [ ] 11.2 Build feature tests for all API endpoints
+  - [x] 11.2 Build feature tests for all API endpoints
     - Create versioned API endpoint tests for v1 routes
     - Implement authentication and authorization testing
     - Build database interaction and JSON response validation tests
     - Add integration tests for complete clinical workflows
     - _Requirements: All requirements need API endpoint testing_
 
-- [ ] 12. Set up comprehensive error handling and logging
+- [x] 12. Set up comprehensive error handling and logging
   - Create standardized error response format with trace IDs
   - Implement global exception handler for consistent API responses
   - Add comprehensive logging for all clinical operations
   - Build error tracking and monitoring for production support
   - _Requirements: All requirements need proper error handling_
 
-- [ ] 13. Configure security and authentication
-  - Set up Laravel Passport OAuth2 authentication
+- [x] 13. Configure security and authentication
+  - Set up Laravel Sanctum  authentication
   - Implement role-based access control using Spatie Laravel Permission
   - Add API rate limiting and request validation
   - Configure audit logging for all patient data access and modifications

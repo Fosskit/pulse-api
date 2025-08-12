@@ -34,18 +34,20 @@ class InvoiceFactory extends Factory
             'visit_id' => Visit::factory(),
             'invoice_category_id' => function () {
                 return Term::firstOrCreate([
-                    'name' => 'General Invoice',
-                    'category' => 'invoice_category'
+                    'name' => 'General Invoice'
                 ], [
-                    'description' => 'General medical services invoice'
+                    'code' => 'GEN_INV',
+                    'description' => 'General medical services invoice',
+                    'terminology_id' => \App\Models\Terminology::factory()->create()->id
                 ])->id;
             },
             'payment_type_id' => function () {
                 return Term::firstOrCreate([
-                    'name' => 'Self Pay',
-                    'category' => 'payment_type'
+                    'name' => 'Self Pay'
                 ], [
-                    'description' => 'Patient pays out of pocket'
+                    'code' => 'SELF_PAY',
+                    'description' => 'Patient pays out of pocket',
+                    'terminology_id' => \App\Models\Terminology::factory()->create()->id
                 ])->id;
             },
             'date' => $date,
@@ -92,10 +94,11 @@ class InvoiceFactory extends Factory
             return [
                 'payment_type_id' => function () {
                     return Term::firstOrCreate([
-                        'name' => 'Insurance',
-                        'category' => 'payment_type'
+                        'name' => 'Insurance'
                     ], [
-                        'description' => 'Covered by insurance'
+                        'code' => 'INSURANCE',
+                        'description' => 'Covered by insurance',
+                        'terminology_id' => \App\Models\Terminology::factory()->create()->id
                     ])->id;
                 },
                 'percentage_discount' => $this->faker->randomFloat(2, 50, 90), // Higher discount for insurance
