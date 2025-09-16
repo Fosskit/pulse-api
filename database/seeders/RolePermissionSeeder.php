@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use App\Models\User;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -44,7 +46,7 @@ class RolePermissionSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create([
+            Permission::firstOrCreate([
                 'name' => $permission,
                 'guard_name' => 'api'
             ]);
@@ -53,18 +55,18 @@ class RolePermissionSeeder extends Seeder
         // Create roles and assign permissions
 
         // Super Admin Role
-        $superAdmin = Role::create([
+        $superAdmin = Role::query()->firstOrCreate([
             'name' => 'super-admin',
             'guard_name' => 'api'
         ]);
-        $superAdmin->givePermissionTo(Permission::all());
+        $superAdmin->syncPermissions(Permission::all());
 
         // Admin Role
-        $admin = Role::create([
+        $admin = Role::query()->firstOrCreate([
             'name' => 'admin',
             'guard_name' => 'api'
         ]);
-        $admin->givePermissionTo([
+        $admin->syncPermissions([
             'view-patients', 'create-patients', 'edit-patients',
             'view-visits', 'create-visits', 'edit-visits',
             'view-encounters', 'create-encounters', 'edit-encounters',
@@ -76,11 +78,11 @@ class RolePermissionSeeder extends Seeder
         ]);
 
         // Doctor Role
-        $doctor = Role::create([
+        $doctor = Role::firstOrCreate([
             'name' => 'doctor',
             'guard_name' => 'api'
         ]);
-        $doctor->givePermissionTo([
+        $doctor->syncPermissions([
             'view-patients', 'create-patients', 'edit-patients',
             'view-visits', 'create-visits', 'edit-visits',
             'view-encounters', 'create-encounters', 'edit-encounters',
@@ -94,11 +96,11 @@ class RolePermissionSeeder extends Seeder
         ]);
 
         // Nurse Role
-        $nurse = Role::create([
+        $nurse = Role::firstOrCreate([
             'name' => 'nurse',
             'guard_name' => 'api'
         ]);
-        $nurse->givePermissionTo([
+        $nurse->syncPermissions([
             'view-patients', 'edit-patients',
             'view-visits', 'edit-visits',
             'view-encounters', 'create-encounters', 'edit-encounters',
@@ -110,11 +112,11 @@ class RolePermissionSeeder extends Seeder
         ]);
 
         // Technician Role
-        $technician = Role::create([
+        $technician = Role::firstOrCreate([
             'name' => 'technician',
             'guard_name' => 'api'
         ]);
-        $technician->givePermissionTo([
+        $technician->syncPermissions([
             'view-patients',
             'view-visits',
             'view-encounters',
@@ -124,11 +126,11 @@ class RolePermissionSeeder extends Seeder
         ]);
 
         // Pharmacist Role
-        $pharmacist = Role::create([
+        $pharmacist = Role::firstOrCreate([
             'name' => 'pharmacist',
             'guard_name' => 'api'
         ]);
-        $pharmacist->givePermissionTo([
+        $pharmacist->syncPermissions([
             'view-patients',
             'view-visits',
             'view-encounters',
@@ -138,11 +140,11 @@ class RolePermissionSeeder extends Seeder
         ]);
 
         // Receptionist Role
-        $receptionist = Role::create([
+        $receptionist = Role::firstOrCreate([
             'name' => 'receptionist',
             'guard_name' => 'api'
         ]);
-        $receptionist->givePermissionTo([
+        $receptionist->syncPermissions([
             'view-patients', 'create-patients', 'edit-patients',
             'view-visits', 'create-visits',
             'view-dashboard',
@@ -150,21 +152,24 @@ class RolePermissionSeeder extends Seeder
             'view-invoices', 'create-invoices', 'process-payments'
         ]);
 
-        $user = User::create([
-            'name' => 'Vengence',
-            'email' => 'vengence@openpulse.org',
-            'username' => 'vengence',
-            'password' => bcrypt('password'),
-            'email_verified_at' => '2025-07-07 16:24:52'
-        ]);
+        $user = User::firstOrCreate(
+            ['email' => 'vengence@pulse.test'],
+            [
+                'name' => 'Vengence',
+                'username' => 'vengence',
+                'password' => Hash::make('password'),
+                'email_verified_at' => '2025-07-07 16:24:52'
+            ]
+        );
+        $user->ulid = $user->ulid ?: Str::ulid()->toBase32();
+        $user->email_verified_at = now();
+        $user->timestamps = false;
+        $user->save();
 
-//        $user->assignRole('doctor');
-
-        $user->givePermissionTo([
-            'manage-system', 'view-system-logs', 'manage-taxonomy'
-        ]);
+        // Super admin role already has all permissions, no need for direct assignment
+        $user->assignRole($superAdmin);
 
         $this->command->info('Roles and permissions seeded successfully!');
-        $this->command->info('Default user "Vengence" created with doctor role and additional admin permissions.');
+        $this->command->info('Default user "Vengence" created with super-admin role.');
     }
 }

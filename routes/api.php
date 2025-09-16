@@ -120,7 +120,7 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1', 'api.rate_li
     | Protected Routes (Require Authentication)
     |--------------------------------------------------------------------------
     */
-    Route::middleware(['auth:sanctum'])->group(function () {
+    Route::middleware(['auth:api'])->group(function () {
 
         // Authentication Management
         Route::prefix('auth')->name('auth.')->group(function () {
@@ -153,7 +153,7 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1', 'api.rate_li
 
         // Patient Management
         Route::apiResource('patients', PatientController::class)
-            ->middleware('permission:view-patients,create-patients,edit-patients,delete-patients');
+            ->middleware('permission:view-patients|create-patients|edit-patients|delete-patients');
         Route::prefix('patients')->name('patients.')->group(function () {
             Route::get('code/{code}', [PatientController::class, 'showByCode'])->name('show-by-code');
             Route::get('{patient}/summary', [PatientController::class, 'summary'])->name('summary');
@@ -191,7 +191,7 @@ Route::prefix('v1')->name('api.v1.')->middleware(['api.version:v1', 'api.rate_li
 
         // Encounters & Observations
         Route::apiResource('encounters', EncounterController::class)
-            ->middleware('permission:view-encounters,create-encounters,edit-encounters,delete-encounters');
+            ->middleware('permission:view-encounters|create-encounters|edit-encounters|delete-encounters');
         Route::prefix('encounters')->name('encounters.')->group(function () {
             Route::get('{encounter}/observations', [EncounterController::class, 'observations'])
                 ->name('observations');

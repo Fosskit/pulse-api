@@ -25,9 +25,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'api.middleware' => ApiMiddleware::class,
             'api.logging' => ApiLoggingMiddleware::class,
             'api.rate_limit' => ApiRateLimitMiddleware::class,
-            'permission' => CheckPermissionMiddleware::class,
             'api.validate' => ValidateApiRequestMiddleware::class,
             'audit.patient' => AuditPatientDataMiddleware::class,
+            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         ]);
 
         // Configure API middleware stack
